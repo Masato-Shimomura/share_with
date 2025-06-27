@@ -1,13 +1,42 @@
 Rails.application.routes.draw do
   devise_for :admin, skip: [:registrations, :passwords], controllers: {
-    sessions: "admin/sessions"
-  }
-  
-  devise_for :users, skip: [:passwords], controllers: {
-    registrations: "public/registrations",
-    sessions: 'public/sessions'
-  }
+  sessions: "admin/sessions"
+}
 
-  root to: "public/homes#top"
-  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
+namespace :admin do
+  root to: "homes#top"
+  resources :groups, only: [:index, :show, :edit, :update, :destroy]
+  resources :users,  only: [:index, :show, :edit, :update, :destroy]
+  resources :posts,  only: [:index, :show, :edit, :update, :destroy]
+end
+
+devise_for :users, skip: [:passwords], controllers: {
+  registrations: "public/registrations",
+  sessions: 'public/sessions'
+}
+
+namespace :public do
+  root to: "homes#top"  
+
+  resources :users, only: [:index, :show, :edit, :update] do
+    collection do
+      get 'mypage'
+      get 'confirm_withdraw'
+      patch 'withdraw'
+    end
+  end
+
+  resources :groups do
+    member do
+      post 'invite'
+      get 'calendar'
+      get 'confirm_withdraw'
+      post 'withdraw'
+    end
+  end
+
+  resources :posts, only: [:index, :new, :create, :show, :edit, :update, :destroy] do
+    resources :comments, only: [:index, :new, :create, :edit, :update, :destroy]
+  end
+ end
 end
