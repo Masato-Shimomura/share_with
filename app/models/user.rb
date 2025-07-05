@@ -8,8 +8,7 @@ class User < ApplicationRecord
 
   has_many :groups
   has_many :posts
-  has_many :comments
-  belongs_to :user       
+  has_many :comments      
 
   def active_for_authentication?
     super && is_active?

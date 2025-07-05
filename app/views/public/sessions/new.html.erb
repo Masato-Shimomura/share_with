@@ -1,5 +1,11 @@
 <h2>Log in</h2>
 
+<% if flash[:alert] %>
+  <div class="alert">
+    <p><%= flash[:alert] %></p>
+  </div>
+<% end %>
+
   <%= form_with model: @user, url: user_session_path do |f| %>
     
   <div class="field">
@@ -23,5 +29,3 @@
     <%= f.submit "Log in" %>
   </div>
 <% end %>
-
-<%= render "public/shared/links" %>

@@ -1,35 +1,57 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>ShareWith</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <%= csrf_meta_tags %>
-    <%= csp_meta_tag %>
+<head>
+  <title>ShareWith</title>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <%= stylesheet_link_tag 'application', media: 'all' %>
+  <%= javascript_pack_tag 'application' %>
+</head>
 
-    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
-  </head>
-
-  <body>
-    <header>
+<body>
+  <header>
+    <% if controller_name == 'homes' && action_name == 'top' %>
       <h1>share_with（トップページ）</h1>
+    <% end %>
 
-      <nav>
-        <ul>
-          <% if user_signed_in? %>
-            <li><%= link_to "ログアウト", destroy_user_session_path, method: :delete %></li>
-          <% else %>
-            <li><%= link_to "新規登録", new_user_registration_path %></li>
-            <li><%= link_to "ログイン", new_user_session_path %></li>
+    <nav>
+      <ul>
+        <% if user_signed_in? %>
+          <!-- ログイン後のメニュー -->
+          <li><%= link_to "Home", public_groups_path %></li>
+          <li><%= link_to "マイページ", mypage_public_users_path %></li>
+          <li><%= link_to "ユーザー検索", public_users_path %></li>
+          <li><%= link_to "投稿検索", public_posts_path %></li>
+          <li><%= link_to "ログアウト", destroy_user_session_path, method: :delete %></li>
+        <% else %>
+          <!-- ログイン前のメニュー -->
+          <% unless controller_name == 'homes' && action_name == 'about' %>
+            <% unless controller_name == 'sessions' && action_name == 'new' %>
+              <li><%= link_to "ログイン", new_user_session_path %></li>
+            <% end %>
+            <% unless controller_name == 'registrations' %>
+              <li><%= link_to "新規登録", new_user_registration_path %></li>
+            <% end %>
           <% end %>
-        </ul>
-      </nav>
-    </header>
+        <% end %>
+      </ul>
+    </nav>
+  </header>
 
-    <%= yield %>
-    
-    <footer>
-    <h3><%= link_to "share_withとは？", public_about_path %></h3>
-    </footer>
-  </body>
+  <%= yield %>
+
+  <footer>
+    <% if !user_signed_in? && !(controller_name == 'homes' && action_name == 'about') %>
+      <!-- ログイン前かつaboutページ以外ではAboutリンクを表示 -->
+      <%= link_to "share_withとは？", public_about_path %>
+    <% elsif controller_name == 'homes' && action_name == 'about' %>
+      <!-- Aboutページではログイン・新規登録リンクを本文に含める -->
+      <p>今すぐ始めたい方はこちら：</p>
+      <ul>
+        <li><%= link_to "新規登録はこちら", new_user_registration_path %></li>
+        <li><%= link_to "ログインはこちら", new_user_session_path %></li>
+      </ul>
+    <% end %>
+  </footer>
+</body>
 </html>
