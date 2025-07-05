@@ -16,7 +16,7 @@ devise_for :users, skip: [:passwords], controllers: {
 }
 root to: "public/homes#top"  
 namespace :public do
-
+ get 'about', to: 'homes#about'
 
   resources :users, only: [:index, :show, :edit, :update] do
     collection do
