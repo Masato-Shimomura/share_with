@@ -18,7 +18,6 @@ class Public::SessionsController < Devise::SessionsController
   #   super
   # end
 
-  protected
    def after_sign_in_path_for(resource)
     public_groups_path
    end
