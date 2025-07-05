@@ -14,6 +14,9 @@ devise_for :users, skip: [:passwords], controllers: {
   registrations: "public/registrations",
   sessions: 'public/sessions'
 }
+
+get "users" => redirect("/users/sign_up")
+
 root to: "public/homes#top"  
 namespace :public do
  get 'about', to: 'homes#about'
