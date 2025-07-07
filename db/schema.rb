@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2025_06_27_133315) do
+ActiveRecord::Schema.define(version: 2025_07_07_074603) do
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -63,13 +63,13 @@ ActiveRecord::Schema.define(version: 2025_06_27_133315) do
   end
 
   create_table "groups", force: :cascade do |t|
-    t.integer "user_id", null: false
+    t.integer "owner_id", null: false
     t.string "name", null: false
     t.text "explanation", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["id"], name: "index_groups_on_id"
-    t.index ["user_id"], name: "index_groups_on_user_id"
+    t.index ["owner_id"], name: "index_groups_on_owner_id"
   end
 
   create_table "posts", force: :cascade do |t|
@@ -117,7 +117,7 @@ ActiveRecord::Schema.define(version: 2025_06_27_133315) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "comments", "posts"
   add_foreign_key "comments", "users"
-  add_foreign_key "groups", "users"
+  add_foreign_key "groups", "users", column: "owner_id"
   add_foreign_key "posts", "groups"
   add_foreign_key "posts", "users"
   add_foreign_key "user_groups", "groups"

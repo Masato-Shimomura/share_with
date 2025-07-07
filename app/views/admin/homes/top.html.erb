@@ -2,8 +2,7 @@
 
 <% if admin_signed_in? %>
   <p>こんにちは、管理者さん！</p>
-  <%= link_to "グループ一覧へ", admin_groups_path %> |
-  <%= link_to "ログアウト", destroy_admin_session_path, method: :delete %>
+  <%= link_to "グループ一覧へ", admin_groups_path %>
 <% else %>
   <p>管理者専用ページです。ログインしてください。</p>
   <%= link_to "ログイン", new_admin_session_path %>

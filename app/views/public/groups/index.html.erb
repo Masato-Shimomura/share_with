@@ -1,2 +1,22 @@
-<h2>グループ一覧ページ（仮）</h2>
-<p>ログイン後に表示されるページです。</p>
+<h2>グループ一覧</h2>
+
+<!-- 新規グループ作成ボタン（招待ページに遷移） -->
+<div style="margin-bottom: 20px;">
+  <%= link_to "+ 新規グループを作成", new_public_group_path, class: "btn btn-primary" %>
+</div>
+
+<!-- 所属グループの一覧 -->
+<% if @groups.any? %>
+  <ul>
+    <% @groups.each do |group| %>
+      <li style="margin-bottom: 15px;">
+        <strong>
+          <%= link_to group.name, public_group_path(group) %>
+        </strong>
+        （メンバー数：<%= group.users.count %>人）
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>まだグループに参加していません。</p>
+<% end %>

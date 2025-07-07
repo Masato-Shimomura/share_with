@@ -6,9 +6,10 @@ class User < ApplicationRecord
 
   has_one_attached :image       
 
-  has_many :groups, dependent: :nullify
+  has_many :user_groups, dependent: :destroy
+  has_many :groups, through: :user_groups
   has_many :posts, dependent: :destroy
-  has_many :comments, dependent: :destroy      
+  has_many :comments, dependent: :destroy
 
   def active_for_authentication?
     super && is_active?
