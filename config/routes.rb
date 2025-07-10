@@ -33,6 +33,7 @@ Rails.application.routes.draw do
     resources :groups do
       member do
         post 'invite'
+        get 'invite'
         get 'calendar'
         get 'confirm_withdraw'
         post 'withdraw'

@@ -23,9 +23,22 @@ class Public::GroupsController < ApplicationController
   end
 
   def show
+    @group = Group.find(params[:id])
     @members = @group.users
     @post = Post.new
     @posts = @group.posts.order(created_at: :desc)
+  end
+
+  def invite
+    # 検索用キーワード
+    if params[:keyword].present?
+      keyword = params[:keyword]
+      @users = User.where("last_name LIKE ? OR first_name LIKE ? OR email LIKE ?", 
+                          "%#{keyword}%", "%#{keyword}%", "%#{keyword}%")
+                   .where.not(id: current_user.id)
+    else
+      @users = User.where.not(id: current_user.id)
+    end
   end
 
   def edit
