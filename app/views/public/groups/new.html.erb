@@ -1,0 +1,17 @@
+<h2>グループ作成</h2>
+
+<%= form_with model: @group, url: public_groups_path, local: true do |f| %>
+  <div>
+    <%= f.label :name, "グループ名" %><br>
+    <%= f.text_field :name %>
+  </div>
+
+  <div>
+    <%= f.label :explanation, "グループ説明" %><br>
+    <%= f.text_area :explanation %>
+  </div>
+
+  <div>
+    <%= f.submit "作成する" %>
+  </div>
+<% end %>

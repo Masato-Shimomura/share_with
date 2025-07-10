@@ -10,6 +10,7 @@ class User < ApplicationRecord
   has_many :groups, through: :user_groups
   has_many :posts, dependent: :destroy
   has_many :comments, dependent: :destroy
+  has_many :owned_groups, class_name: "Group", foreign_key: "owner_id", dependent: :nullify
 
   def active_for_authentication?
     super && is_active?
@@ -17,5 +18,9 @@ class User < ApplicationRecord
   
   def inactive_message
     is_active? ? super : :inactive_account
+  end
+
+  def full_name
+    "#{last_name} #{first_name}"
   end
 end

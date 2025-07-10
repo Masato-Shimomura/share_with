@@ -1,0 +1,73 @@
+<h2><%= @group.name %></h2>
+
+<p><strong>説明:</strong> <%= @group.explanation %></p>
+
+<p>
+  <strong>作成者:</strong>
+  <% if @group.owner.present? %>
+    <%= @group.owner.last_name %> <%= @group.owner.first_name %>
+  <% else %>
+    （退会済みユーザー）
+  <% end %>
+</p>
+
+<h3>メンバー一覧</h3>
+<ul>
+  <% @members.each do |member| %>
+    <li><%= member.last_name %> <%= member.first_name %></li>
+  <% end %>
+</ul>
+
+<%= link_to "グループ編集", edit_public_group_path(@group), class: "btn btn-primary" %>
+<%= link_to "カレンダーを見る", calendar_public_group_path(@group), class: "btn btn-secondary" %>
+
+<div class="group-post-section" style="display: flex; gap: 20px; margin-top: 30px;">
+  <!-- 左側：投稿フォーム -->
+  <div class="post-form" style="flex: 1;">
+    <%= form_with model: [@group, @post], url: public_group_posts_path(@group), local: true do |f| %>
+      <div class="field">
+        <%= f.label :title, "タイトル" %><br>
+        <%= f.text_field :title %>
+      </div>
+
+      <div class="field">
+        <%= f.label :body, "本文" %><br>
+        <%= f.text_area :body, rows: 4 %>
+      </div>
+
+      <div class="field">
+        <%= f.label :start_at, "開始日時" %><br>
+        <%= f.datetime_select :start_at %>
+      </div>
+
+      <div class="field">
+        <%= f.label :end_at, "終了日時" %><br>
+        <%= f.datetime_select :end_at %>
+      </div>
+
+      <div class="actions">
+        <%= f.submit "投稿する", class: "btn btn-success" %>
+      </div>
+    <% end %>
+  </div>
+
+  <!-- 右側：投稿一覧 -->
+  <div class="post-list" style="flex: 1;">
+    <h3>投稿一覧</h3>
+    <% @posts.each do |post| %>
+      <div class="post-item" style="border-bottom: 1px solid #ccc; padding: 10px 0;">
+        <p><strong>タイトル:</strong> <%= post.title %></p>
+        <p><%= post.body.truncate(100) %></p>
+        <p>投稿者: <%= post.user.last_name %> <%= post.user.first_name %></p>
+        <%= link_to "詳細", public_group_post_path(@group, post), class: "btn btn-link" %>
+        <%= link_to "コメント", public_group_post_comments_path(@group, post), class: "btn btn-link" %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<div style="margin-top: 30px;">
+  <%= link_to "メンバー招待", invite_public_group_path(@group), class: "btn btn-warning" %>
+  <%= link_to "グループ退会", confirm_withdraw_public_group_path(@group), class: "btn btn-danger", data: { confirm: "本当に退会しますか？" } %>
+  <%= link_to "グループ一覧へ戻る", public_groups_path, class: "btn btn-light" %>
+</div>
