@@ -19,7 +19,7 @@
       <ul>
         <% if user_signed_in? %>
           <!-- ログイン後のメニュー -->
-          <li><%= link_to "Home", public_groups_path %></li>
+          <li><%= link_to "Home(グループ一覧)", public_groups_path %></li>
           <li><%= link_to "マイページ", mypage_public_users_path %></li>
           <li><%= link_to "ユーザー検索", public_users_path %></li>
           <%# <li><%= link_to "投稿検索", public_posts_path %></li>
@@ -38,6 +38,12 @@
       </ul>
     </nav>
   </header>
+
+  <% flash.each do |key, message| %>
+    <div class="alert alert-<%= key == 'notice' ? 'success' : 'danger' %>">
+      <%= message %>
+    </div>
+  <% end %>
 
   <%= yield %>
 

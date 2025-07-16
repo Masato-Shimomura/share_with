@@ -1,0 +1,26 @@
+<h2>メンバー招待（既存グループ）: <%= @group.name %></h2>
+
+<%= form_with url: send_invites_public_group_path(@group), method: :post, local: true do |f| %>
+  <div>
+    <label>ユーザー検索：</label>
+    <%= text_field_tag :keyword, params[:keyword], placeholder: "名前やメールで検索" %>
+    <%= submit_tag "検索" %>
+  </div>
+
+  <% if @users.any? %>
+    <ul>
+      <% @users.each do |user| %>
+        <li>
+          <%= check_box_tag "invited_user_ids[]", user.id %>
+          <%= user.last_name %> <%= user.first_name %> (<%= user.email %>)
+        </li>
+      <% end %>
+    </ul>
+
+    <%= f.submit "招待を送信" %>
+  <% else %>
+    <p>条件に一致するユーザーはいません。</p>
+  <% end %>
+<% end %>
+
+<%= link_to "グループ詳細に戻る", public_group_path(@group) %>

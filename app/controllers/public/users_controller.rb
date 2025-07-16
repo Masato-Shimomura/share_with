@@ -1,5 +1,6 @@
 class Public::UsersController < ApplicationController
   def mypage
+    @pending_user_groups = current_user.user_groups.pending.includes(:group)
     @user = current_user
   end
   

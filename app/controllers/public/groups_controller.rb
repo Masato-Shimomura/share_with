@@ -2,6 +2,29 @@ class Public::GroupsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_group, only: [:show, :edit, :update, :destroy, :calendar, :confirm_withdraw, :withdraw]
 
+  def accept_invitation
+    user_group = current_user.user_groups.find_by(group_id: params[:id], status: :pending)
+    if user_group
+      user_group.update(status: :accepted)
+      flash[:notice] = "グループに参加しました"
+    else
+      flash[:alert] = "有効な招待が見つかりませんでした"
+    end
+    redirect_to mypage_public_users_path  # ← 適切な遷移先に変更OK
+  end
+  
+  # 招待辞退
+  def reject_invitation
+    user_group = current_user.user_groups.find_by(group_id: params[:id], status: :pending)
+    if user_group
+      user_group.destroy
+      flash[:notice] = "招待を辞退しました"
+    else
+      flash[:alert] = "辞退する招待が見つかりませんでした"
+    end
+    redirect_to mypage_public_users_path  # ← 適切な遷移先に変更OK
+  end
+
   def index
     @groups = current_user.groups
   end
@@ -47,7 +70,7 @@ class Public::GroupsController < ApplicationController
   end
 
   def invite
-    # 検索用キーワード
+
     if params[:keyword].present?
       keyword = params[:keyword]
       @users = User.where("last_name LIKE ? OR first_name LIKE ? OR email LIKE ?", 
@@ -57,7 +80,39 @@ class Public::GroupsController < ApplicationController
       @users = User.where.not(id: current_user.id)
     end
   end
+  
+  # POST /public/groups/:id/invite
+  def send_invites
+    @group = Group.find(params[:id])
+    
+    if params[:invited_user_ids].present?
+      params[:invited_user_ids].each do |user_id|
+        # すでに存在しないかチェック
+        unless @group.user_groups.exists?(user_id: user_id)
+          @group.user_groups.create(user_id: user_id, status: :pending)
+        end
+      end
+      flash[:notice] = "メンバーを招待しました"
+    else
+      flash[:alert] = "メンバーが選択されていません"
+    end
+  
+    redirect_to public_group_path(@group)
+  end
 
+  def invite_existing
+    @group = Group.find(params[:id])
+  
+    if params[:keyword].present?
+      keyword = params[:keyword]
+      @users = User.where("last_name LIKE ? OR first_name LIKE ? OR email LIKE ?", 
+                          "%#{keyword}%", "%#{keyword}%", "%#{keyword}%")
+                   .where.not(id: current_user.id)
+    else
+      @users = User.where.not(id: current_user.id)
+    end
+  end
+  
   def edit
   end
 

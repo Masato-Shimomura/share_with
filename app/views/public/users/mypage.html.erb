@@ -1,0 +1,15 @@
+<h2>招待中のグループ</h2>
+
+<% if @pending_user_groups.any? %>
+  <ul>
+    <% @pending_user_groups.each do |user_group| %>
+      <li style="margin-bottom: 10px;">
+        <strong><%= user_group.group.name %></strong><br>
+        <%= button_to "参加する", accept_invitation_public_group_path(user_group.group), method: :post, class: "btn btn-primary" %>
+        <%= button_to "辞退する", reject_invitation_public_group_path(user_group.group), method: :delete, class: "btn btn-danger", form: { data: { confirm: "本当に辞退しますか？" } } %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>現在、参加待ちのグループはありません。</p>
+<% end %>

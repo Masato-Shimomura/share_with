@@ -30,22 +30,29 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :user_groups, only: [] do
+      member do
+        patch :accept
+        delete :reject
+      end
+    end
+
     resources :groups do
-      # ✅ グループ未作成状態での招待（一覧検索など）用
       collection do
-        get 'invite'
+        get 'invite'  # 新規作成前の招待ページ
       end
 
-      # ✅ グループ作成後の操作（ID必要）
       member do
-        get 'invite'
-        post 'invite'
+        post 'accept_invitation'
+        delete 'reject_invitation'
+        get 'invite_existing'  # 既存グループへの招待ページ
+        post 'send_invites'    # 招待送信アクション
         get 'calendar'
         get 'confirm_withdraw'
         post 'withdraw'
       end
 
-      # ✅ 投稿とコメントはグループにネスト（必要）
+      # ここで posts と comments を groups にネスト
       resources :posts do
         resources :comments, only: [:index, :new, :create, :edit, :update, :destroy]
       end
