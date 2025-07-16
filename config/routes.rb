@@ -17,7 +17,7 @@ Rails.application.routes.draw do
 
   get "users" => redirect("/users/sign_up")
 
-  root to: "public/homes#top"  
+  root to: "public/homes#top"
 
   namespace :public do
     get 'about', to: 'homes#about'
@@ -31,15 +31,22 @@ Rails.application.routes.draw do
     end
 
     resources :groups do
-      member do
-        post 'invite'
+      # ✅ グループ未作成状態での招待（一覧検索など）用
+      collection do
         get 'invite'
+      end
+
+      # ✅ グループ作成後の操作（ID必要）
+      member do
+        get 'invite'
+        post 'invite'
         get 'calendar'
         get 'confirm_withdraw'
         post 'withdraw'
       end
 
-      resources :posts, only: [:index, :new, :create, :show, :edit, :update, :destroy] do
+      # ✅ 投稿とコメントはグループにネスト（必要）
+      resources :posts do
         resources :comments, only: [:index, :new, :create, :edit, :update, :destroy]
       end
     end

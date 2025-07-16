@@ -1,6 +1,6 @@
 class Public::GroupsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_group, only: [:show, :edit, :update, :destroy, :invite, :calendar, :confirm_withdraw, :withdraw]
+  before_action :set_group, only: [:show, :edit, :update, :destroy, :calendar, :confirm_withdraw, :withdraw]
 
   def index
     @groups = current_user.groups
@@ -8,6 +8,14 @@ class Public::GroupsController < ApplicationController
 
   def new
     @group = Group.new
+
+    # 招待されたユーザーIDをparamsで受け取って保持
+   if params[:invited_user_ids].present?
+    # 配列に変換（int型にする）
+    @invited_user_ids = params[:invited_user_ids].map(&:to_i)
+   else
+    @invited_user_ids = []
+   end
   end
 
   def create
@@ -16,8 +24,17 @@ class Public::GroupsController < ApplicationController
 
     if @group.save
       current_user.user_groups.create(group: @group, status: :accepted)
-      redirect_to public_groups_path, notice: "グループを作成しました"
+
+      if params[:invited_user_ids].present?
+        params[:invited_user_ids].each do |user_id|
+          UserGroup.create(user_id: user_id, group_id: @group.id, status: :pending)
+        end
+      end
+
+      redirect_to public_groups_path, notice: "グループを作成し、招待を送信しました"
     else
+
+      @invited_user_ids = params[:invited_user_ids]&.map(&:to_i) || []
       render :new
     end
   end

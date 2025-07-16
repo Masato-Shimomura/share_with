@@ -1,17 +1,16 @@
 <h2>メンバー招待</h2>
 
-<!-- 検索フォーム -->
-<%= form_with url: invite_public_group_path(@group), method: :get, local: true do %>
+<!-- 検索フォーム + ユーザー選択フォームを1つのformにまとめる -->
+<%= form_with url: new_public_group_path, method: :get, local: true do %>
+  <!-- 検索キーワード -->
   <div class="form-group">
     <%= label_tag :keyword, "ユーザー検索" %>
     <%= text_field_tag :keyword, params[:keyword], placeholder: "名前、メールアドレスなど", class: "form-control" %>
-    <%= submit_tag "検索", class: "btn btn-primary", style: "margin-top: 5px;" %>
+    <%= submit_tag "検索", name: nil, class: "btn btn-primary", style: "margin-top: 5px;" %>
   </div>
-<% end %>
 
-<!-- ユーザー一覧 -->
-<%= form_with url: new_public_group_path, method: :get, local: true do %>
-  <div class="user-list">
+  <!-- ユーザー一覧 -->
+  <div class="user-list" style="margin-top: 20px;">
     <% @users.each do |user| %>
       <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 5px;">
         <%= check_box_tag "invited_user_ids[]", user.id, false, id: "user_#{user.id}" %>
@@ -20,6 +19,7 @@
     <% end %>
   </div>
 
+  <!-- 招待操作 -->
   <div class="form-actions" style="margin-top: 20px;">
     <%= submit_tag "OK", class: "btn btn-success" %>
     <%= link_to "戻る", public_groups_path, class: "btn btn-secondary", style: "margin-left: 10px;" %>

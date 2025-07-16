@@ -1,5 +1,16 @@
 <h2>グループ作成</h2>
 
+<h3>招待メンバー一覧</h3>
+<% if @invited_user_ids.any? %>
+  <ul>
+    <% User.where(id: @invited_user_ids).each do |user| %>
+      <li><%= user.last_name %> <%= user.first_name %></li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>※ まだ招待メンバーが選ばれていません</p>
+<% end %>
+
 <%= form_with model: @group, url: public_groups_path, local: true do |f| %>
   <div>
     <%= f.label :name, "グループ名" %><br>
@@ -11,7 +22,13 @@
     <%= f.text_area :explanation %>
   </div>
 
+  <!-- hidden_field で招待メンバーIDを渡す -->
+  <% @invited_user_ids.each do |user_id| %>
+    <%= hidden_field_tag "invited_user_ids[]", user_id %>
+  <% end %>
+
   <div>
-    <%= f.submit "作成する" %>
+    <%= f.submit "作成する", class: "btn btn-primary" %>
+    <%= link_to "キャンセル", public_groups_path, class: "btn btn-secondary" %>
   </div>
 <% end %>
