@@ -49,7 +49,7 @@ Rails.application.routes.draw do
         post 'send_invites'    # 招待送信アクション
         get 'calendar'
         get 'confirm_withdraw'
-        post 'withdraw'
+        delete 'withdraw'
       end
 
       # ここで posts と comments を groups にネスト

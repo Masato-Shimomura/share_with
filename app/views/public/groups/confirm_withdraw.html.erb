@@ -1,0 +1,10 @@
+<h2>本当にこのグループを退会しますか？</h2>
+
+<p>グループ名: <strong><%= @group.name %></strong></p>
+
+<p>退会するとこのグループの情報は閲覧できなくなります。</p>
+
+<div style="margin-top: 20px;">
+  <%= button_to "退会する", withdraw_public_group_path(@group), method: :delete, class: "btn btn-danger" %>
+  <%= link_to "退会しない", public_group_path(@group), class: "btn btn-secondary" %>
+</div>

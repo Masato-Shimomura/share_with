@@ -112,6 +112,25 @@ class Public::GroupsController < ApplicationController
       @users = User.where.not(id: current_user.id)
     end
   end
+
+  def confirm_withdraw
+    @group = Group.find(params[:id])
+    # viewだけ表示（確認メッセージ含め）
+  end
+  
+  def withdraw
+    group = Group.find(params[:id])
+    user_group = UserGroup.find_by(user: current_user, group: group)
+  
+    if user_group&.accepted?
+      user_group.destroy
+      flash[:notice] = "グループから退会しました。"
+      redirect_to public_groups_path
+    else
+      flash[:alert] = "グループに参加していません。"
+      redirect_to public_group_path(group)
+    end
+  end
   
   def edit
   end
