@@ -1,0 +1,30 @@
+<h2>グループ情報の編集</h2>
+
+<%= form_with(model: @group, url: public_group_path(@group), method: :patch, local: true) do |f| %>
+  <% if @group.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@group.errors.count, "エラー") %> が発生しました:</h2>
+      <ul>
+        <% @group.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name, "グループ名" %><br>
+    <%= f.text_field :name %>
+  </div>
+
+  <div class="field">
+    <%= f.label :explanation, "説明" %><br>
+    <%= f.text_area :explanation %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit "更新する", class: "btn btn-primary" %>
+  </div>
+<% end %>
+
+<%= link_to "戻る", public_group_path(@group), class: "btn btn-secondary", style: "margin-top: 20px;" %>

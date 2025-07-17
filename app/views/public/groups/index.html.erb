@@ -14,6 +14,10 @@
           <%= link_to group.name, public_group_path(group) %>
         </strong>
         （メンバー数：<%= group.accepted_users.count %>人）
+
+        <% if current_user.id == group.owner_id %>
+          <%= link_to "削除", public_group_path(group), method: :delete, data: { confirm: "本当に削除しますか？" }, class: "btn btn-danger btn-sm", style: "margin-left: 10px;" %>
+        <% end %>  
       </li>
     <% end %>
   </ul>

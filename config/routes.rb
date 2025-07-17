@@ -26,7 +26,7 @@ Rails.application.routes.draw do
       collection do
         get 'mypage'
         get 'confirm_withdraw'
-        patch 'withdraw'
+        delete 'withdraw'
       end
     end
 

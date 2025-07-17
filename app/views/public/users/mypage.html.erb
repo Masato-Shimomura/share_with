@@ -4,14 +4,14 @@
   <h3>ユーザー情報</h3>
   <p>名前: <%= @user.last_name %> <%= @user.first_name %></p>
   <p>メールアドレス: <%= @user.email %></p>
-  <%= link_to "プロフィール編集", edit_public_user_path(@user), class: "btn btn-primary" %>
+  <%= link_to "プロフィール編集", edit_user_registration_path(@user), class: "btn btn-primary" %>
 </section>
 
 <section>
   <h3>参加済みのグループ一覧</h3>
-  <% if @user.groups.accepted.any? %>
+  <% if @user.accepted_groups.any? %>
     <ul>
-      <% @user.groups.accepted.each do |group| %>
+      <% @user.accepted_groups.each do |group| %>
         <li><%= link_to group.name, public_group_path(group) %></li>
       <% end %>
     </ul>
@@ -36,19 +36,3 @@
     <p>招待中のグループはありません。</p>
   <% end %>
 </section>
-
-<h2>招待中のグループ</h2>
-
-<% if @pending_user_groups.any? %>
-  <ul>
-    <% @pending_user_groups.each do |user_group| %>
-      <li style="margin-bottom: 10px;">
-        <strong><%= user_group.group.name %></strong><br>
-        <%= button_to "参加する", accept_invitation_public_group_path(user_group.group), method: :post, class: "btn btn-primary" %>
-        <%= button_to "辞退する", reject_invitation_public_group_path(user_group.group), method: :delete, class: "btn btn-danger", form: { data: { confirm: "本当に辞退しますか？" } } %>
-      </li>
-    <% end %>
-  </ul>
-<% else %>
-  <p>現在、参加待ちのグループはありません。</p>
-<% end %>

@@ -2,7 +2,7 @@
 
 class Public::RegistrationsController < Devise::RegistrationsController
   before_action :configure_permitted_parameters, only: [:create]
-  # before_action :configure_account_update_params, only: [:update]
+  before_action :configure_account_update_params, only: [:update]
 
   # GET /resource/sign_up
   # def new
@@ -56,6 +56,18 @@ class Public::RegistrationsController < Devise::RegistrationsController
   # The path used after sign up.
   def after_sign_up_path_for(resource)
     public_groups_path
+  end
+
+  def after_update_path_for(resource)
+    mypage_public_users_path
+  end
+
+  def after_destroy_path_for(resource)
+    root_path
+  end
+
+  def configure_account_update_params
+    devise_parameter_sanitizer.permit(:account_update, keys: [:last_name, :first_name, :email])
   end
 
   # The path used after sign up for inactive accounts.

@@ -14,6 +14,10 @@ class User < ApplicationRecord
   has_many :comments, dependent: :destroy
   has_many :owned_groups, class_name: "Group", foreign_key: "owner_id", dependent: :nullify
 
+  def accepted_groups
+    groups.joins(:user_groups).where(user_groups: { status: :accepted })
+  end
+
   def active_for_authentication?
     super && is_active?
   end
