@@ -68,6 +68,6 @@
 
 <div style="margin-top: 30px;">
   <%= link_to "メンバー招待", invite_existing_public_group_path(@group), class: "btn btn-warning" %>
-  <%= link_to "グループ退会", confirm_withdraw_public_group_path(@group), class: "btn btn-danger", data: { confirm: "本当に退会しますか？" } %>
+  <%= link_to "グループ退会", confirm_withdraw_public_group_path(@group), class: "btn btn-danger" %>
   <%= link_to "グループ一覧へ戻る", public_groups_path, class: "btn btn-light" %>
 </div>

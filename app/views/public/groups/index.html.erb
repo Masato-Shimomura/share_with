@@ -13,7 +13,7 @@
         <strong>
           <%= link_to group.name, public_group_path(group) %>
         </strong>
-        （メンバー数：<%= group.users.count %>人）
+        （メンバー数：<%= group.accepted_users.count %>人）
       </li>
     <% end %>
   </ul>

@@ -64,7 +64,7 @@ class Public::GroupsController < ApplicationController
 
   def show
     @group = Group.find(params[:id])
-    @members = @group.users
+    @members = @group.user_groups.where(status: :accepted).includes(:user).map(&:user)
     @post = Post.new
     @posts = @group.posts.order(created_at: :desc)
   end
