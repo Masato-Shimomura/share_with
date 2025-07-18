@@ -41,22 +41,21 @@ Rails.application.routes.draw do
 
     resources :groups do
       collection do
-        get 'invite'  # 新規作成前の招待ページ
+        get 'invite'  
         get 'select_group', to: 'groups#select_group'
       end
 
       member do
         post 'accept_invitation'
         delete 'reject_invitation'
-        get 'invite_existing'  # 既存グループへの招待ページ
-        post 'send_invites'    # 招待送信アクション
+        get 'invite_existing'  
+        post 'send_invites'   
         get 'calendar'
         get 'confirm_withdraw'
         delete 'withdraw'
         post 'send_invite', to: 'groups#send_invite'
       end
 
-      # ここで posts と comments を groups にネスト
       resources :posts do
         resources :comments, only: [:index, :new, :create, :edit, :update, :destroy]
       end

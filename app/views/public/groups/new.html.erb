@@ -22,7 +22,6 @@
     <%= f.text_area :explanation %>
   </div>
 
-  <!-- hidden_field で招待メンバーIDを渡す -->
   <% @invited_user_ids.each do |user_id| %>
     <%= hidden_field_tag "invited_user_ids[]", user_id %>
   <% end %>

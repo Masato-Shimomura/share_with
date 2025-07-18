@@ -1,6 +1,5 @@
 <h2>ユーザー検索</h2>
 
-<!-- 検索フォーム -->
 <%= form_with url: public_users_path, method: :get, local: true do |f| %>
   <div style="margin-bottom: 15px;">
     <%= f.label :keyword, "名前またはメールアドレスで検索" %><br>
@@ -9,7 +8,6 @@
   </div>
 <% end %>
 
-<!-- ユーザー一覧 -->
 <% if @users.any? %>
   <ul>
     <% @users.each do |user| %>

@@ -1,6 +1,5 @@
 <h2>メンバー招待</h2>
 
-<!-- 🔍 検索フォーム -->
 <%= form_with url: invite_public_groups_path, method: :get, local: true do %>
   <div class="form-group">
     <%= label_tag :keyword, "ユーザー検索" %>
@@ -11,9 +10,7 @@
 
 <hr>
 
-<!-- ✅ 招待送信フォーム（グループ作成へ） -->
 <%= form_with url: new_public_group_path, method: :get, local: true do %>
-  <!-- 🔒 hidden_field に事前指定された invited_user_ids を追加 -->
   <% if params[:invited_user_ids].present? %>
     <% params[:invited_user_ids].each do |user_id| %>
       <%= hidden_field_tag "invited_user_ids[]", user_id %>

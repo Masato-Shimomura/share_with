@@ -22,7 +22,6 @@
 <%= link_to "カレンダーを見る", calendar_public_group_path(@group), class: "btn btn-secondary" %>
 
 <div class="group-post-section" style="display: flex; gap: 20px; margin-top: 30px;">
-  <!-- 左側：投稿フォーム -->
   <div class="post-form" style="flex: 1;">
     <%= form_with model: [@group, @post], url: public_group_posts_path(@group), local: true do |f| %>
       <div class="field">
@@ -51,7 +50,6 @@
     <% end %>
   </div>
 
-  <!-- 右側：投稿一覧 -->
   <div class="post-list" style="flex: 1;">
     <h3>投稿一覧</h3>
     <% @posts.each do |post| %>
