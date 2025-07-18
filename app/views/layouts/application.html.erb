@@ -22,7 +22,7 @@
           <li><%= link_to "Home(グループ一覧)", public_groups_path %></li>
           <li><%= link_to "マイページ", mypage_public_users_path %></li>
           <li><%= link_to "ユーザー検索", public_users_path %></li>
-          <%# <li><%= link_to "投稿検索", public_posts_path %></li>
+          <li><%= link_to "投稿検索", public_search_public_posts_path %></li>
           <li><%= link_to "ログアウト", destroy_user_session_path, method: :delete %></li>
         <% else %>
           <!-- ログイン前のメニュー -->

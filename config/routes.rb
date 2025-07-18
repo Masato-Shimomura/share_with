@@ -22,6 +22,8 @@ Rails.application.routes.draw do
   namespace :public do
     get 'about', to: 'homes#about'
 
+    get "posts/search", to: "posts#search", as: "search_public_posts"
+
     resources :users, only: [:index, :show, :edit, :update] do
       collection do
         get 'mypage'

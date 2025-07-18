@@ -56,6 +56,6 @@ class Public::CommentsController < ApplicationController
   end
 
   def comment_params
-    params.require(:comment).permit(:content)
+    params.require(:comment).permit(:body)
   end
 end

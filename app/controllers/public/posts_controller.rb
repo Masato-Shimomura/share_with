@@ -1,11 +1,20 @@
 class Public::PostsController < ApplicationController
     before_action :authenticate_user!
-    before_action :set_group
+    before_action :set_group, only: [:new, :create, :show]
     before_action :set_post, only: [:show, :edit, :update, :destroy]
     before_action :authorize_post!, only: [:edit, :update, :destroy]
   
     def index
       @posts = @group.posts.order(created_at: :desc)
+    end
+
+    def search
+      @keyword = params[:keyword]
+      @posts = if @keyword.present?
+                 Post.where("title LIKE ? OR body LIKE ?", "%#{@keyword}%", "%#{@keyword}%").includes(:group, :user)
+               else
+                 Post.none
+               end
     end
   
     def new
