@@ -1,0 +1,15 @@
+<h2>投稿詳細</h2>
+
+<p><strong>タイトル:</strong> <%= @post.title %></p>
+<p><strong>本文:</strong> <%= simple_format(@post.body) %></p>
+<p><strong>投稿者:</strong> <%= @post.user.last_name %> <%= @post.user.first_name %></p>
+<p><strong>開始日時:</strong> <%= l(@post.start_at, format: :long) %></p>
+<p><strong>終了日時:</strong> <%= l(@post.end_at, format: :long) %></p>
+
+<% if @post.user == current_user %>
+  <%= link_to "編集", edit_public_group_post_path(@group, @post), class: "btn btn-primary" %>
+  <%= link_to "削除", public_group_post_path(@group, @post), method: :delete, data: { confirm: "本当に削除しますか？" }, class: "btn btn-danger" %>
+<% end %>
+
+<%= link_to "コメント", public_group_post_comments_path(@group, @post), class: "btn btn-outline-primary btn-sm" %>
+<%= link_to "グループ詳細に戻る", public_group_path(@group), class: "btn btn-light mt-3" %>

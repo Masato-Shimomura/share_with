@@ -26,12 +26,12 @@
   <div class="post-form" style="flex: 1;">
     <%= form_with model: [@group, @post], url: public_group_posts_path(@group), local: true do |f| %>
       <div class="field">
-        <%= f.label :title, "タイトル" %><br>
+        <%= f.label :title, "作業名、役割、イベント名など" %><br>
         <%= f.text_field :title %>
       </div>
 
       <div class="field">
-        <%= f.label :body, "本文" %><br>
+        <%= f.label :body, "詳細メモ" %><br>
         <%= f.text_area :body, rows: 4 %>
       </div>
 

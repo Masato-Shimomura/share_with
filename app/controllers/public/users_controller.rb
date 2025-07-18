@@ -6,8 +6,8 @@ class Public::UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
-    if @user.is_deleted
-      redirect_to public_users_path, alert: "このユーザーは退会済みです"
+    unless @user.is_active
+      redirect_to public_users_path, alert: "このユーザーは退会済みです" and return
     end
   end
 

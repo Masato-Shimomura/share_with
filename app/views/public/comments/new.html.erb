@@ -1,0 +1,11 @@
+<h2>コメントを投稿する</h2>
+
+<%= form_with model: [@group, @post, @comment], local: true do |f| %>
+  <div class="form-group">
+    <%= f.label :body, "コメント内容" %>
+    <%= f.text_area :body, rows: 4, class: "form-control" %>
+  </div>
+  <%= f.submit "投稿", class: "btn btn-primary mt-2" %>
+<% end %>
+
+<%= link_to "← コメント一覧に戻る", public_group_post_comments_path(@group, @post), class: "btn btn-secondary mt-3" %>

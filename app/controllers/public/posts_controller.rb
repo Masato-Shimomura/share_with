@@ -1,8 +1,8 @@
 class Public::PostsController < ApplicationController
-  class Public::PostsController < ApplicationController
     before_action :authenticate_user!
     before_action :set_group
     before_action :set_post, only: [:show, :edit, :update, :destroy]
+    before_action :authorize_post!, only: [:edit, :update, :destroy]
   
     def index
       @posts = @group.posts.order(created_at: :desc)
@@ -16,10 +16,11 @@ class Public::PostsController < ApplicationController
       @post = @group.posts.new(post_params)
       @post.user = current_user
       if @post.save
-        redirect_to public_group_post_path(@group, @post), notice: "投稿を作成しました"
+        redirect_to public_group_path(@group), notice: "投稿を作成しました"
       else
         # 失敗時はグループ詳細に戻ることも検討してください
-        render :new
+        @posts = @group.posts.includes(:user).order(created_at: :desc)
+        render "public/groups/show"
       end
     end
   
@@ -31,7 +32,7 @@ class Public::PostsController < ApplicationController
   
     def update
       if @post.update(post_params)
-        redirect_to public_group_post_path(@group, @post), notice: "投稿を更新しました"
+        redirect_to public_group_path(@group), notice: "投稿を更新しました"
       else
         render :edit
       end
@@ -39,7 +40,7 @@ class Public::PostsController < ApplicationController
   
     def destroy
       @post.destroy
-      redirect_to public_group_posts_path(@group), notice: "投稿を削除しました"
+      redirect_to public_group_path(@group), notice: "投稿を削除しました"
     end
   
     private
@@ -54,5 +55,11 @@ class Public::PostsController < ApplicationController
   
     def post_params
       params.require(:post).permit(:title, :body, :start_at, :end_at)
+    end
+
+    def authorize_post!
+      unless @post.user == current_user
+        redirect_to public_group_path(@group), alert: "編集・削除できるのは投稿者のみです。"
+      end
     end
   end

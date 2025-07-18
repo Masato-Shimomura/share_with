@@ -13,11 +13,18 @@
 
 <!-- ✅ 招待送信フォーム（グループ作成へ） -->
 <%= form_with url: new_public_group_path, method: :get, local: true do %>
+  <!-- 🔒 hidden_field に事前指定された invited_user_ids を追加 -->
+  <% if params[:invited_user_ids].present? %>
+    <% params[:invited_user_ids].each do |user_id| %>
+      <%= hidden_field_tag "invited_user_ids[]", user_id %>
+    <% end %>
+  <% end %>
+
   <div class="user-list">
     <% if @users.any? %>
       <% @users.each do |user| %>
         <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 5px;">
-          <%= check_box_tag "invited_user_ids[]", user.id, false, id: "user_#{user.id}" %>
+          <%= check_box_tag "invited_user_ids[]", user.id, params[:invited_user_ids]&.include?(user.id.to_s), id: "user_#{user.id}" %>
           <%= label_tag "user_#{user.id}", "#{user.last_name} #{user.first_name}（#{user.email}）" %>
         </div>
       <% end %>
