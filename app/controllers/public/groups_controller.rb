@@ -73,11 +73,11 @@ class Public::GroupsController < ApplicationController
 
     if params[:keyword].present?
       keyword = params[:keyword]
-      @users = User.where("last_name LIKE ? OR first_name LIKE ? OR email LIKE ?", 
+      @users = User.active.where("last_name LIKE ? OR first_name LIKE ? OR email LIKE ?", 
                           "%#{keyword}%", "%#{keyword}%", "%#{keyword}%")
                    .where.not(id: current_user.id)
     else
-      @users = User.where.not(id: current_user.id)
+      @users = User.active.where.not(id: current_user.id)
     end
   end
   
@@ -105,12 +105,30 @@ class Public::GroupsController < ApplicationController
   
     if params[:keyword].present?
       keyword = params[:keyword]
-      @users = User.where("last_name LIKE ? OR first_name LIKE ? OR email LIKE ?", 
+      @users = User.active.where("last_name LIKE ? OR first_name LIKE ? OR email LIKE ?", 
                           "%#{keyword}%", "%#{keyword}%", "%#{keyword}%")
                    .where.not(id: current_user.id)
     else
-      @users = User.where.not(id: current_user.id)
+      @users = User.active.where.not(id: current_user.id)
     end
+  end
+
+  def select_group
+    @target_user = User.find(params[:user_id])
+    @groups = current_user.groups
+  end
+
+  def send_invite
+    group = Group.find(params[:id])
+    target_user = User.find(params[:user_id])
+
+    if group.user_groups.exists?(user_id: target_user.id)
+      redirect_to public_user_path(target_user), alert: "すでに招待済み、またはメンバーです。"
+      return
+    end
+
+    group.user_groups.create!(user: target_user, status: :pending)
+    redirect_to public_group_path(group), notice: "#{target_user.last_name} #{target_user.first_name}さんを招待しました。"
   end
 
   def confirm_withdraw

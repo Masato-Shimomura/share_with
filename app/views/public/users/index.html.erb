@@ -1,0 +1,23 @@
+<h2>ユーザー検索</h2>
+
+<!-- 検索フォーム -->
+<%= form_with url: public_users_path, method: :get, local: true do |f| %>
+  <div style="margin-bottom: 15px;">
+    <%= f.label :keyword, "名前またはメールアドレスで検索" %><br>
+    <%= f.text_field :keyword, value: params[:keyword], placeholder: "例: 山田 太郎、example@example.com" %>
+    <%= f.submit "検索", class: "btn btn-primary" %>
+  </div>
+<% end %>
+
+<!-- ユーザー一覧 -->
+<% if @users.any? %>
+  <ul>
+    <% @users.each do |user| %>
+      <li style="margin-bottom: 10px;">
+        <%= link_to "#{user.last_name} #{user.first_name}（#{user.email}）", public_user_path(user) %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>該当するユーザーはいません。</p>
+<% end %>

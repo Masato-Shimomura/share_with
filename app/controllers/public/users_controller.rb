@@ -3,6 +3,23 @@ class Public::UsersController < ApplicationController
     @pending_user_groups = current_user.user_groups.pending.includes(:group)
     @user = current_user
   end
+
+  def show
+    @user = User.find(params[:id])
+    if @user.is_deleted
+      redirect_to public_users_path, alert: "このユーザーは退会済みです"
+    end
+  end
+
+  def index
+    @keyword = params[:keyword]
+    @users = User.where(is_active: true).where.not(id: current_user.id)
+  
+    if @keyword.present?
+      keyword = "%#{@keyword}%"
+      @users = @users.where("last_name LIKE ? OR first_name LIKE ? OR email LIKE ?", keyword, keyword, keyword)
+    end
+  end
   
   def confirm_withdraw
     @user = current_user

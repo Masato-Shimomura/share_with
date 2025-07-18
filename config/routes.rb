@@ -40,6 +40,7 @@ Rails.application.routes.draw do
     resources :groups do
       collection do
         get 'invite'  # 新規作成前の招待ページ
+        get 'select_group', to: 'groups#select_group'
       end
 
       member do
@@ -50,6 +51,7 @@ Rails.application.routes.draw do
         get 'calendar'
         get 'confirm_withdraw'
         delete 'withdraw'
+        post 'send_invite', to: 'groups#send_invite'
       end
 
       # ここで posts と comments を groups にネスト

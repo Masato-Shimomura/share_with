@@ -1,0 +1,15 @@
+<h2>どのグループに招待しますか？</h2>
+<p>対象ユーザー：<%= @target_user.last_name %> <%= @target_user.first_name %></p>
+
+<% if @groups.any? %>
+  <ul>
+    <% @groups.each do |group| %>
+      <li>
+        <%= group.name %>
+        <%= button_to "このグループに招待", send_invite_public_group_path(group, user_id: @target_user.id), method: :post, class: "btn btn-sm btn-primary" %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>招待できるグループがありません。</p>
+<% end %>
