@@ -15,7 +15,7 @@ class User < ApplicationRecord
   has_many :owned_groups, class_name: "Group", foreign_key: "owner_id", dependent: :nullify
 
   def accepted_groups
-    groups.joins(:user_groups).where(user_groups: { status: :accepted })
+    groups
   end
 
   def active_for_authentication?

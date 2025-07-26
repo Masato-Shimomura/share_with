@@ -21,6 +21,8 @@
 <%= link_to "グループ編集", edit_public_group_path(@group), class: "btn btn-primary" %>
 <%= link_to "カレンダーを見る", calendar_public_group_path(@group), class: "btn btn-secondary" %>
 
+<%= render 'public/shared/error_messages', resource: @post %>
+
 <div class="group-post-section" style="display: flex; gap: 20px; margin-top: 30px;">
   <div class="post-form" style="flex: 1;">
     <%= form_with model: [@group, @post], url: public_group_posts_path(@group), local: true do |f| %>

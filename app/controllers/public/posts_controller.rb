@@ -1,6 +1,6 @@
 class Public::PostsController < ApplicationController
     before_action :authenticate_user!
-    before_action :set_group, only: [:new, :create, :show]
+    before_action :set_group
     before_action :set_post, only: [:show, :edit, :update, :destroy]
     before_action :authorize_post!, only: [:edit, :update, :destroy]
   
@@ -29,6 +29,7 @@ class Public::PostsController < ApplicationController
       else
         # 失敗時はグループ詳細に戻ることも検討してください
         @posts = @group.posts.includes(:user).order(created_at: :desc)
+        @members = @group.user_groups.where(status: :accepted).includes(:user).map(&:user)
         render "public/groups/show"
       end
     end
