@@ -38,7 +38,6 @@ class Public::CommentsController < ApplicationController
     redirect_to public_group_post_comments_path(@group, @post), notice: "コメントを削除しました。"
   end
 
-  # その他edit, update, destroyも同様に@postの中で扱う
 
   private
 

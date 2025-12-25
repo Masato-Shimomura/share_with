@@ -10,10 +10,9 @@ class Public::GroupsController < ApplicationController
     else
       flash[:alert] = "有効な招待が見つかりませんでした"
     end
-    redirect_to mypage_public_users_path  # ← 適切な遷移先に変更OK
+    redirect_to mypage_public_users_path  
   end
   
-  # 招待辞退
   def reject_invitation
     user_group = current_user.user_groups.find_by(group_id: params[:id], status: :pending)
     if user_group
@@ -22,7 +21,7 @@ class Public::GroupsController < ApplicationController
     else
       flash[:alert] = "辞退する招待が見つかりませんでした"
     end
-    redirect_to mypage_public_users_path  # ← 適切な遷移先に変更OK
+    redirect_to mypage_public_users_path  
   end
 
   def index
@@ -32,9 +31,9 @@ class Public::GroupsController < ApplicationController
   def new
     @group = Group.new
 
-    # 招待されたユーザーIDをparamsで受け取って保持
+    
    if params[:invited_user_ids].present?
-    # 配列に変換（int型にする）
+    
     @invited_user_ids = params[:invited_user_ids].map(&:to_i)
    else
     @invited_user_ids = []
@@ -81,13 +80,13 @@ class Public::GroupsController < ApplicationController
     end
   end
   
-  # POST /public/groups/:id/invite
+  
   def send_invites
     @group = Group.find(params[:id])
     
     if params[:invited_user_ids].present?
       params[:invited_user_ids].each do |user_id|
-        # すでに存在しないかチェック
+        
         unless @group.user_groups.exists?(user_id: user_id)
           @group.user_groups.create(user_id: user_id, status: :pending)
         end
@@ -133,7 +132,7 @@ class Public::GroupsController < ApplicationController
 
   def confirm_withdraw
     @group = Group.find(params[:id])
-    # viewだけ表示（確認メッセージ含め）
+    
   end
   
   def withdraw
@@ -168,7 +167,7 @@ class Public::GroupsController < ApplicationController
     redirect_to public_groups_path, notice: "グループを削除しました"
   end
 
-  # 例: 招待・カレンダー・退会などのアクションも必要に応じてここに追加
+
 
   private
 

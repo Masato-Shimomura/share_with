@@ -29,9 +29,9 @@ class Public::UsersController < ApplicationController
     @user = current_user
   
     ActiveRecord::Base.transaction do
-      # 退会ユーザーが作成者のグループのowner_idをnullに
+      
       Group.where(owner_id: @user.id).update_all(owner_id: nil)
-      # ユーザーの論理削除
+      
       @user.update!(is_active: false)
     end
   

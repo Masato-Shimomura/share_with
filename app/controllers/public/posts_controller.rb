@@ -27,7 +27,7 @@ class Public::PostsController < ApplicationController
       if @post.save
         redirect_to public_group_path(@group), notice: "投稿を作成しました"
       else
-        # 失敗時はグループ詳細に戻ることも検討してください
+        
         @posts = @group.posts.includes(:user).order(created_at: :desc)
         @members = @group.user_groups.where(status: :accepted).includes(:user).map(&:user)
         render "public/groups/show"
