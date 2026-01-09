@@ -2,6 +2,7 @@ class Public::GroupsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_group, only: [:show, :edit, :update, :destroy, :calendar, :confirm_withdraw, :withdraw]
   before_action :authorize_group_owner!, only: [:edit, :update, :destroy]
+  before_action :ensure_group_member!, only: [:show, :calendar, :calendar_events, :invite_existing, :confirm_withdraw]
 
 
   def accept_invitation
@@ -181,6 +182,16 @@ class Public::GroupsController < ApplicationController
   def set_group
     @group = Group.find(params[:id])
   end
+
+  def ensure_group_member!
+    return if @group.owner_id == current_user.id
+  
+    is_member = @group.user_groups.exists?(user_id: current_user.id, status: :accepted)
+  
+    unless is_member
+      redirect_to public_groups_path, alert: "このグループのメンバーのみアクセスできます。"
+    end
+  end  
 
   def group_params
     params.require(:group).permit(:name, :explanation)

@@ -1,6 +1,7 @@
 class Public::PostsController < ApplicationController
     before_action :authenticate_user!
     before_action :set_group, except: [:search]
+    before_action :ensure_group_member!, except: [:search]
     before_action :set_post, only: [:show, :edit, :update, :destroy]
     before_action :authorize_post!, only: [:edit, :update, :destroy]
   
@@ -10,11 +11,17 @@ class Public::PostsController < ApplicationController
 
     def search
       @keyword = params[:keyword]
-      @posts = if @keyword.present?
-                 Post.where("title LIKE ? OR body LIKE ?", "%#{@keyword}%", "%#{@keyword}%").includes(:group, :user)
-               else
-                 Post.none
-               end
+    
+      if @keyword.present?
+        group_ids = current_user.groups.pluck(:id)
+    
+        @posts = Post
+                   .where(group_id: group_ids)
+                   .where("title LIKE ? OR body LIKE ?", "%#{@keyword}%", "%#{@keyword}%")
+                   .includes(:group, :user)
+      else
+        @posts = Post.none
+      end
     end
   
     def new
@@ -61,6 +68,14 @@ class Public::PostsController < ApplicationController
   
     def set_post
       @post = @group.posts.find(params[:id])
+    end
+
+    def ensure_group_member!
+      return if @group.owner_id == current_user.id
+      is_member = @group.user_groups.exists?(user_id: current_user.id, status: :accepted)
+      unless is_member
+        redirect_to public_groups_path, alert: "このグループのメンバーのみアクセスできます。"
+      end
     end
   
     def post_params

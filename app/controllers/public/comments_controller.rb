@@ -1,6 +1,7 @@
 class Public::CommentsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_group_and_post
+  before_action :ensure_group_member!
   before_action :set_comment, only: [:edit, :update, :destroy]
   before_action :authorize_comment!, only: [:edit, :update, :destroy]
 
@@ -50,8 +51,16 @@ class Public::CommentsController < ApplicationController
     @comment = @post.comments.find(params[:id])
   end
 
+  def ensure_group_member!
+    return if @group.owner_id == current_user.id
+    is_member = @group.user_groups.exists?(user_id: current_user.id, status: :accepted)
+    unless is_member
+      redirect_to public_groups_path, alert: "このグループのメンバーのみアクセスできます。"
+    end
+  end
+
   def authorize_comment!
-    redirect_to public_group_post_comments_path(@group, @post), alert: "編集・削除できるのは投稿者のみです。" unless @comment.user == current_user
+    redirect_to public_group_post_comments_path(@group, @post), alert: "編集・削除できるのはコメント投稿者のみです。" unless @comment.user == current_user
   end
 
   def comment_params
