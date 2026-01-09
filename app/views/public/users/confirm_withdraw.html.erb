@@ -1,6 +1,30 @@
-<h2>退会確認</h2>
+<div class="container mt-5" style="max-width: 600px;">
 
-<p>本当に退会しますか？退会するとすべてのデータが削除されます。</p>
+  <div class="card border-danger">
+    <div class="card-body">
 
-<%= button_to "退会する", withdraw_public_users_path, method: :delete, class: "btn btn-danger", data: { confirm: "本当に退会しますか？" } %>
-<%= link_to "キャンセル", edit_user_registration_path, class: "btn btn-secondary" %>
+      <h2 class="text-danger mb-3">退会確認</h2>
+
+      <div class="alert alert-danger">
+        <strong>注意：</strong>
+        退会すると、参加しているグループ・投稿・コメントなど
+        すべてのデータが完全に削除されます。
+        この操作は取り消せません。
+      </div>
+
+      <div class="d-flex justify-content-between">
+        <%= link_to "キャンセル",
+                    edit_user_registration_path,
+                    class: "btn btn-secondary" %>
+
+        <%= button_to "退会する",
+                      withdraw_public_users_path,
+                      method: :delete,
+                      data: { confirm: "本当に退会しますか？この操作は取り消せません。" },
+                      class: "btn btn-danger" %>
+      </div>
+
+    </div>
+  </div>
+
+</div>

@@ -1,11 +1,47 @@
-<h2>コメントを編集する</h2>
+<div class="container mt-4" style="max-width: 700px;">
 
-  <%= form_with model: @comment, url: public_group_post_comment_path(@group, @post, @comment), local: true do |f| %>
-  <div class="form-group">
-    <%= f.label :body, "コメント内容" %>
-    <%= f.text_area :body, rows: 4, class: "form-control" %>
+  <!-- ページタイトル -->
+  <h2 class="mb-4">コメントを編集する</h2>
+
+  <!-- フォームカード -->
+  <div class="card">
+    <div class="card-body">
+
+      <%= form_with model: @comment,
+                    url: public_group_post_comment_path(@group, @post, @comment),
+                    local: true do |f| %>
+
+        <% if @comment.errors.any? %>
+          <div class="alert alert-danger">
+            <h6 class="mb-2">
+              <%= pluralize(@comment.errors.count, "件のエラー") %>があります
+            </h6>
+            <ul class="mb-0">
+              <% @comment.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <div class="mb-3">
+          <%= f.label :body, "コメント内容", class: "form-label" %>
+          <%= f.text_area :body,
+                          rows: 4,
+                          class: "form-control" %>
+        </div>
+
+        <div class="d-flex justify-content-between">
+          <%= link_to "コメント一覧に戻る",
+                      public_group_post_comments_path(@group, @post),
+                      class: "btn btn-outline-secondary" %>
+
+          <%= f.submit "更新する", class: "btn btn-primary" %>
+        </div>
+
+      <% end %>
+
+    </div>
   </div>
-  <%= f.submit "更新", class: "btn btn-primary mt-2" %>
-<% end %>
 
-<%= link_to "← コメント一覧に戻る", public_group_post_comments_path(@group, @post), class: "btn btn-secondary mt-3" %>
+</div>

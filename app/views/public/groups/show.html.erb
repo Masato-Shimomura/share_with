@@ -1,76 +1,146 @@
-<h2><%= @group.name %></h2>
+<div class="container mt-4">
 
-<p><strong>説明:</strong> <%= @group.explanation %></p>
+  <!-- グループ基本情報 -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <h2 class="card-title mb-2"><%= @group.name %></h2>
 
-<p>
-  <strong>作成者:</strong>
-  <% if @group.owner.present? %>
-    <%= @group.owner.last_name %> <%= @group.owner.first_name %>
-  <% else %>
-    （退会済みユーザー）
-  <% end %>
-</p>
+      <p class="text-muted mb-2">
+        <strong>説明：</strong><%= @group.explanation %>
+      </p>
 
-<h3>メンバー一覧</h3>
-<ul>
-  <% @members.each do |member| %>
-    <li><%= member.last_name %> <%= member.first_name %></li>
-  <% end %>
-</ul>
-
-<%= link_to "グループ編集", edit_public_group_path(@group), class: "btn btn-primary" %>
-<%= link_to "カレンダーを見る", calendar_public_group_path(@group), class: "btn btn-secondary" %>
-
-<%= render 'public/shared/error_messages', resource: @post %>
-
-<div class="group-post-section" style="display: flex; gap: 20px; margin-top: 30px;">
-  <div class="post-form" style="flex: 1;">
-    <%= form_with model: [@group, @post], url: public_group_posts_path(@group), local: true do |f| %>
-      <div class="field">
-        <%= f.label :title, "作業名、役割、イベント名など" %><br>
-        <%= f.text_field :title %>
-      </div>
-
-      <div class="field">
-        <%= f.label :body, "詳細メモ" %><br>
-        <%= f.text_area :body, rows: 4 %>
-      </div>
-
-      <div class="field">
-        <%= f.label :start_at, "開始日時" %><br>
-        <%= f.datetime_select :start_at %>
-      </div>
-
-      <div class="field">
-        <%= f.label :end_at, "終了日時" %><br>
-        <%= f.datetime_select :end_at %>
-      </div>
-
-      <div class="actions">
-        <%= f.submit "投稿する", class: "btn btn-success" %>
-      </div>
-    <% end %>
+      <p class="mb-0">
+        <strong>作成者：</strong>
+        <% if @group.owner.present? %>
+          <%= @group.owner.last_name %> <%= @group.owner.first_name %>
+        <% else %>
+          （退会済みユーザー）
+        <% end %>
+      </p>
+    </div>
   </div>
 
-  <div class="post-list" style="flex: 1;">
-    <h3>投稿一覧</h3>
-    <% @posts.each do |post| %>
-      <div class="post-item" style="border-bottom: 1px solid #ccc; padding: 10px 0;">
-        <p><strong>タイトル:</strong> <%= post.title %></p>
-        <p><%= post.body.truncate(100) %></p>
-        <p>投稿者: <%= post.user.last_name %> <%= post.user.first_name %></p>
-        <%= link_to "詳細", public_group_post_path(@group, post), class: "btn btn-link" %>
-        <%= link_to "コメント", public_group_post_comments_path(@group, post), class: "btn btn-link" %>
-      </div>
-    <% end %>
+  <!-- メンバー一覧 -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title mb-3">メンバー一覧</h5>
+      <ul class="list-group list-group-flush">
+        <% @members.each do |member| %>
+          <li class="list-group-item">
+            <%= member.last_name %> <%= member.first_name %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
   </div>
-</div>
 
-<div style="margin-top: 30px;">
-  <%= link_to "メンバー招待", invite_existing_public_group_path(@group), class: "btn btn-warning" %>
-  <%= link_to "グループ退会", confirm_withdraw_public_group_path(@group), class: "btn btn-danger" %>
-  <%= link_to "グループ一覧へ戻る", public_groups_path, class: "btn btn-light" %>
-  <% if current_user.id == @group.owner_id %>
-  <%= link_to "グループ削除", public_group_path(@group), method: :delete, data: { confirm: "本当に削除しますか？" }, class: "btn btn-danger" %>
-  <% end %>
+  <!-- 投稿エリア -->
+  <div class="row g-4">
+
+    <!-- 投稿フォーム -->
+    <div class="col-md-6">
+      <div class="card h-100">
+        <div class="card-body">
+          <h5 class="card-title mb-3">新規投稿</h5>
+
+          <%= render 'public/shared/error_messages', resource: @post %>
+
+          <%= form_with model: [@group, @post],
+                        url: public_group_posts_path(@group),
+                        local: true do |f| %>
+
+            <div class="mb-3">
+              <%= f.label :title, "作業名・イベント名", class: "form-label" %>
+              <%= f.text_field :title, class: "form-control" %>
+            </div>
+
+            <div class="mb-3">
+              <%= f.label :body, "詳細メモ", class: "form-label" %>
+              <%= f.text_area :body, rows: 4, class: "form-control" %>
+            </div>
+
+            <div class="mb-3">
+              <%= f.label :start_at, "開始日時", class: "form-label" %><br>
+              <%= f.datetime_select :start_at %>
+            </div>
+
+            <div class="mb-3">
+              <%= f.label :end_at, "終了日時", class: "form-label" %><br>
+              <%= f.datetime_select :end_at %>
+            </div>
+
+            <div class="text-end">
+              <%= f.submit "投稿する", class: "btn btn-primary" %>
+            </div>
+
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <!-- 投稿一覧 -->
+    <div class="col-md-6">
+      <div class="card h-100">
+        <div class="card-body">
+          <h5 class="card-title mb-3">投稿一覧</h5>
+
+          <% @posts.each do |post| %>
+            <div class="border-bottom pb-2 mb-3">
+              <p class="mb-1"><strong><%= post.title %></strong></p>
+              <p class="text-muted mb-1"><%= post.body.truncate(80) %></p>
+              <small class="text-muted">
+                投稿者：<%= post.user.last_name %> <%= post.user.first_name %>
+              </small>
+
+              <div class="mt-2">
+                <%= link_to "詳細",
+                            public_group_post_path(@group, post),
+                            class: "btn btn-sm btn-outline-primary" %>
+
+                <%= link_to "コメント",
+                            public_group_post_comments_path(@group, post),
+                            class: "btn btn-sm btn-outline-secondary" %>
+              </div>
+            </div>
+          <% end %>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 操作ボタン -->
+  <div class="d-flex flex-wrap gap-2 mt-4">
+
+    <%= link_to "メンバー招待",
+                invite_existing_public_group_path(@group),
+                class: "btn btn-outline-primary" %>
+
+    <%= link_to "カレンダーを見る",
+                calendar_public_group_path(@group),
+                class: "btn btn-outline-primary" %>
+
+    <%= link_to "グループ退会",
+                confirm_withdraw_public_group_path(@group),
+                class: "btn btn-outline-danger" %>
+
+    <%= link_to "グループ一覧へ戻る",
+                public_groups_path,
+                class: "btn btn-light" %>
+
+    <% if current_user.id == @group.owner_id %>
+      <%= link_to "グループ編集",
+                  edit_public_group_path(@group),
+                  class: "btn btn-primary" %>
+
+      <%= link_to "グループ削除",
+                  public_group_path(@group),
+                  method: :delete,
+                  data: { confirm: "本当に削除しますか？" },
+                  class: "btn btn-outline-danger" %>
+    <% end %>
+
+  </div>
+
 </div>

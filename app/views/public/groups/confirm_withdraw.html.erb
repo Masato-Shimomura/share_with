@@ -1,10 +1,36 @@
-<h2>本当にこのグループを退会しますか？</h2>
+<div class="container mt-5" style="max-width: 600px;">
 
-<p>グループ名: <strong><%= @group.name %></strong></p>
+  <div class="card border-danger">
+    <div class="card-body">
 
-<p>退会するとこのグループの情報は閲覧できなくなります。</p>
+      <h2 class="text-danger mb-3">
+        本当にこのグループを退会しますか？
+      </h2>
 
-<div style="margin-top: 20px;">
-  <%= button_to "退会する", withdraw_public_group_path(@group), method: :delete, class: "btn btn-danger" %>
-  <%= link_to "退会しない", public_group_path(@group), class: "btn btn-secondary" %>
+      <p class="mb-2">
+        <strong>グループ名：</strong>
+        <%= @group.name %>
+      </p>
+
+      <div class="alert alert-danger">
+        退会すると、このグループの投稿・コメントなどの情報は
+        閲覧できなくなります。
+        この操作は取り消せません。
+      </div>
+
+      <div class="d-flex justify-content-between">
+        <%= link_to "退会しない",
+                    public_group_path(@group),
+                    class: "btn btn-secondary" %>
+
+        <%= button_to "退会する",
+                      withdraw_public_group_path(@group),
+                      method: :delete,
+                      class: "btn btn-danger",
+                      data: { confirm: "本当に退会しますか？" } %>
+      </div>
+
+    </div>
+  </div>
+
 </div>

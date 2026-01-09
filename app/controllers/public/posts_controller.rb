@@ -42,7 +42,7 @@ class Public::PostsController < ApplicationController
   
     def update
       if @post.update(post_params)
-        redirect_to public_group_path(@group), notice: "投稿を更新しました"
+        redirect_to public_group_post_path(@group), notice: "投稿を更新しました"
       else
         render :edit
       end

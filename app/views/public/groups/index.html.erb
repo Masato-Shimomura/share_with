@@ -1,26 +1,36 @@
-<h2>グループ一覧</h2>
+<div class="container mt-4">
 
-<!-- 新規グループ作成ボタン（招待ページに遷移） -->
-<div style="margin-bottom: 20px;">
+<!-- 見出し + 新規グループ作成ボタン（招待ページに遷移） -->
+<div class="d-flex align-items-center justify-content-between mb-3">
+ <h2 class="mb-0">グループ一覧</h2>
+
   <%= link_to "+ 新規グループを作成", invite_public_groups_path, class: "btn btn-primary" %>
 </div>
 
 <!-- 所属グループの一覧 -->
 <% if @groups.any? %>
-  <ul>
+  <ul class="list-group">
     <% @groups.each do |group| %>
-      <li style="margin-bottom: 15px;">
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+      
+      <div>
         <strong>
-          <%= link_to group.name, public_group_path(group) %>
+          <%= link_to group.name, public_group_path(group), class: "text-decoration-none" %>
         </strong>
+        <span class="text-muted ms-2">
         （メンバー数：<%= group.accepted_users.count %>人）
+        </span>
+       </div> 
 
         <% if current_user.id == group.owner_id %>
-          <%= link_to "削除", public_group_path(group), method: :delete, data: { confirm: "本当に削除しますか？" }, class: "btn btn-danger btn-sm", style: "margin-left: 10px;" %>
+          <%= link_to "削除", public_group_path(group), method: :delete, data: { confirm: "本当に削除しますか？" }, class: "btn btn-danger btn-sm" %>
         <% end %>  
       </li>
     <% end %>
   </ul>
 <% else %>
-  <p>まだグループに参加していません。</p>
+ <div class="alert alert-info">
+  まだグループに参加していません。
+ </div> 
 <% end %>
+</div>

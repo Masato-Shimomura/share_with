@@ -1,38 +1,88 @@
-<h2>マイページ</h2>
+<div class="container mt-4">
 
-<section>
-  <h3>ユーザー情報</h3>
-  <p>名前: <%= @user.last_name %> <%= @user.first_name %></p>
-  <p>メールアドレス: <%= @user.email %></p>
-  <%= link_to "プロフィール編集", edit_user_registration_path(@user), class: "btn btn-primary" %>
-</section>
+  <!-- ページタイトル -->
+  <div class="d-flex align-items-center justify-content-between mb-4">
+    <h2 class="mb-0">マイページ</h2>
 
-<section>
-  <h3>参加済みのグループ一覧</h3>
-  <% if @user.accepted_groups.any? %>
-    <ul>
-      <% @user.accepted_groups.each do |group| %>
-        <li><%= link_to group.name, public_group_path(group) %></li>
+    <%= link_to "プロフィール編集",
+                edit_user_registration_path(@user),
+                class: "btn btn-outline-primary" %>
+  </div>
+
+  <!-- ユーザー情報 -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title mb-3">ユーザー情報</h5>
+
+      <p class="mb-2">
+        <strong>名前：</strong>
+        <%= @user.last_name %> <%= @user.first_name %>
+      </p>
+
+      <p class="mb-0">
+        <strong>メールアドレス：</strong>
+        <%= @user.email %>
+      </p>
+    </div>
+  </div>
+
+  <!-- 参加済みグループ -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title mb-3">参加済みのグループ</h5>
+
+      <% if @user.accepted_groups.any? %>
+        <ul class="list-group list-group-flush">
+          <% @user.accepted_groups.each do |group| %>
+            <li class="list-group-item">
+              <%= link_to group.name,
+                          public_group_path(group),
+                          class: "text-decoration-none" %>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <div class="alert alert-secondary mb-0">
+          まだ参加しているグループはありません。
+        </div>
       <% end %>
-    </ul>
-  <% else %>
-    <p>まだ参加しているグループはありません。</p>
-  <% end %>
-</section>
+    </div>
+  </div>
 
-<section>
-  <h3>招待中のグループ</h3>
-  <% if @pending_user_groups.any? %>
-    <ul>
-      <% @pending_user_groups.each do |user_group| %>
-        <li>
-          <strong><%= user_group.group.name %></strong>
-          <%= button_to "参加する", accept_invitation_public_group_path(user_group.group), method: :post, class: "btn btn-success" %>
-          <%= button_to "辞退する", reject_invitation_public_group_path(user_group.group), method: :delete, class: "btn btn-danger", data: { confirm: "本当に辞退しますか？" } %>
-        </li>
+  <!-- 招待中グループ -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title mb-3">招待中のグループ</h5>
+
+      <% if @pending_user_groups.any? %>
+        <ul class="list-group list-group-flush">
+          <% @pending_user_groups.each do |user_group| %>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              
+              <strong><%= user_group.group.name %></strong>
+
+              <div class="d-flex gap-2">
+                <%= button_to "参加する",
+                              accept_invitation_public_group_path(user_group.group),
+                              method: :post,
+                              class: "btn btn-success btn-sm" %>
+
+                <%= button_to "辞退する",
+                              reject_invitation_public_group_path(user_group.group),
+                              method: :delete,
+                              data: { confirm: "本当に辞退しますか？" },
+                              class: "btn btn-danger btn-sm" %>
+              </div>
+
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <div class="alert alert-secondary mb-0">
+          招待中のグループはありません。
+        </div>
       <% end %>
-    </ul>
-  <% else %>
-    <p>招待中のグループはありません。</p>
-  <% end %>
-</section>
+    </div>
+  </div>
+
+</div>

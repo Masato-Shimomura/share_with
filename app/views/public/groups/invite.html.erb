@@ -1,37 +1,85 @@
-<h2>メンバー招待</h2>
+<div class="container mt-4" style="max-width: 800px;">
 
-<%= form_with url: invite_public_groups_path, method: :get, local: true do %>
-  <div class="form-group">
-    <%= label_tag :keyword, "ユーザー検索" %>
-    <%= text_field_tag :keyword, params[:keyword], placeholder: "名前、メールアドレスなど", class: "form-control" %>
-    <%= submit_tag "検索", class: "btn btn-primary", style: "margin-top: 5px;" %>
-  </div>
-<% end %>
+  <!-- ページタイトル -->
+  <h2 class="mb-4">メンバー招待</h2>
 
-<hr>
+  <!-- ユーザー検索 -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title mb-3">ユーザー検索</h5>
 
-<%= form_with url: new_public_group_path, method: :get, local: true do %>
-  <% if params[:invited_user_ids].present? %>
-    <% params[:invited_user_ids].each do |user_id| %>
-      <%= hidden_field_tag "invited_user_ids[]", user_id %>
-    <% end %>
-  <% end %>
+      <%= form_with url: invite_public_groups_path,
+                    method: :get,
+                    local: true,
+                    class: "row g-2 align-items-end" do %>
 
-  <div class="user-list">
-    <% if @users.any? %>
-      <% @users.each do |user| %>
-        <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 5px;">
-          <%= check_box_tag "invited_user_ids[]", user.id, params[:invited_user_ids]&.include?(user.id.to_s), id: "user_#{user.id}" %>
-          <%= label_tag "user_#{user.id}", "#{user.last_name} #{user.first_name}" %>
+        <div class="col-12 col-md-9">
+          <%= label_tag :keyword, "名前・メールアドレスで検索", class: "form-label" %>
+          <%= text_field_tag :keyword,
+                              params[:keyword],
+                              placeholder: "例：山田 太郎 / example@example.com",
+                              class: "form-control" %>
         </div>
+
+        <div class="col-12 col-md-3 text-end">
+          <%= submit_tag "検索", class: "btn btn-primary w-100" %>
+        </div>
+
       <% end %>
-    <% else %>
-      <p>該当するユーザーが見つかりませんでした。</p>
-    <% end %>
+    </div>
   </div>
 
-  <div class="form-actions" style="margin-top: 20px;">
-    <%= submit_tag "OK（グループ作成へ）", class: "btn btn-success" %>
-    <%= link_to "グループ一覧に戻る", public_groups_path, class: "btn btn-secondary", style: "margin-left: 10px;" %>
+  <!-- 招待メンバー選択 -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title mb-3">招待するユーザーを選択</h5>
+
+      <%= form_with url: new_public_group_path,
+                    method: :get,
+                    local: true do %>
+
+        <% if params[:invited_user_ids].present? %>
+          <% params[:invited_user_ids].each do |user_id| %>
+            <%= hidden_field_tag "invited_user_ids[]", user_id %>
+          <% end %>
+        <% end %>
+
+        <% if @users.any? %>
+          <ul class="list-group mb-3">
+            <% @users.each do |user| %>
+              <li class="list-group-item">
+                <div class="form-check">
+                  <%= check_box_tag "invited_user_ids[]",
+                                    user.id,
+                                    params[:invited_user_ids]&.include?(user.id.to_s),
+                                    id: "user_#{user.id}",
+                                    class: "form-check-input" %>
+
+                  <%= label_tag "user_#{user.id}",
+                                "#{user.last_name} #{user.first_name}",
+                                class: "form-check-label" %>
+                </div>
+              </li>
+            <% end %>
+          </ul>
+        <% else %>
+          <div class="alert alert-secondary">
+            該当するユーザーが見つかりませんでした。
+          </div>
+        <% end %>
+
+        <!-- 操作ボタン -->
+        <div class="d-flex justify-content-between">
+          <%= link_to "グループ一覧に戻る",
+                      public_groups_path,
+                      class: "btn btn-secondary" %>
+
+          <%= submit_tag "OK（グループ作成へ）",
+                         class: "btn btn-success" %>
+        </div>
+
+      <% end %>
+    </div>
   </div>
-<% end %>
+
+</div>

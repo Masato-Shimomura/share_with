@@ -1,33 +1,81 @@
-<h2>グループ作成</h2>
+<div class="container mt-4" style="max-width: 800px;">
 
-<h3>招待メンバー一覧</h3>
-<% if @invited_user_ids.any? %>
-  <ul>
-    <% User.where(id: @invited_user_ids).each do |user| %>
-      <li><%= user.last_name %> <%= user.first_name %></li>
-    <% end %>
-  </ul>
-<% else %>
-  <p>※ まだ招待メンバーが選ばれていません</p>
-<% end %>
+  <!-- ページタイトル -->
+  <h2 class="mb-4">グループ作成</h2>
 
-<%= form_with model: @group, url: public_groups_path, local: true do |f| %>
-  <div>
-    <%= f.label :name, "グループ名" %><br>
-    <%= f.text_field :name %>
-  </div>
+  <!-- エラーメッセージ -->
+<% if @group.errors.any? %>
+  <div class="alert alert-danger">
+  <h5 class="mb-2">
+  <%= @group.errors.count %> 件のエラーがあります
+  </h5>
 
-  <div>
-    <%= f.label :explanation, "グループ説明" %><br>
-    <%= f.text_area :explanation %>
-  </div>
-
-  <% @invited_user_ids.each do |user_id| %>
-    <%= hidden_field_tag "invited_user_ids[]", user_id %>
-  <% end %>
-
-  <div>
-    <%= f.submit "作成する", class: "btn btn-primary" %>
-    <%= link_to "キャンセル", public_groups_path, class: "btn btn-secondary" %>
+    <ul class="mb-0">
+      <% @group.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
   </div>
 <% end %>
+
+
+  <!-- 招待メンバー確認 -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title mb-3">招待メンバー一覧</h5>
+
+      <% if @invited_user_ids.any? %>
+        <ul class="list-group">
+          <% User.where(id: @invited_user_ids).each do |user| %>
+            <li class="list-group-item">
+              <%= user.last_name %> <%= user.first_name %>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <div class="alert alert-secondary mb-0">
+          まだ招待メンバーが選ばれていません。
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <!-- グループ情報入力 -->
+  <div class="card">
+    <div class="card-body">
+
+      <%= form_with model: @group,
+                    url: public_groups_path,
+                    local: true do |f| %>
+
+        <div class="mb-3">
+          <%= f.label :name, "グループ名", class: "form-label" %>
+          <%= f.text_field :name, class: "form-control" %>
+        </div>
+
+        <div class="mb-4">
+          <%= f.label :explanation, "グループ説明", class: "form-label" %>
+          <%= f.text_area :explanation,
+                          class: "form-control",
+                          rows: 4 %>
+        </div>
+
+        <% @invited_user_ids.each do |user_id| %>
+          <%= hidden_field_tag "invited_user_ids[]", user_id %>
+        <% end %>
+
+        <!-- 操作ボタン -->
+        <div class="d-flex justify-content-between">
+          <%= link_to "キャンセル",
+                      public_groups_path,
+                      class: "btn btn-secondary" %>
+
+          <%= f.submit "作成する", class: "btn btn-primary" %>
+        </div>
+
+      <% end %>
+
+    </div>
+  </div>
+
+</div>

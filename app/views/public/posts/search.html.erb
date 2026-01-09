@@ -1,23 +1,60 @@
-<h2>投稿検索</h2>
+<div class="container mt-4" style="max-width: 800px;">
 
-<%= form_with url: public_search_public_posts_path, method: :get, local: true do %>
-  <div class="form-group">
-    <%= label_tag :keyword, "キーワード検索" %>
-    <%= text_field_tag :keyword, params[:keyword], class: "form-control" %>
+  <!-- ページタイトル -->
+
+  <h2 class="mb-4">投稿検索</h2>
+
+  <!-- 検索フォーム -->
+
+  <div class="card mb-4">
+    <div class="card-body">
+
+  <%= form_with url: public_search_public_posts_path,
+                method: :get,
+                local: true do %>
+
+    <div class="mb-3">
+      <%= label_tag :keyword, "キーワード検索", class: "form-label" %>
+
+      <div class="input-group">
+        <%= text_field_tag :keyword,
+                           params[:keyword],
+                           class: "form-control",
+                           placeholder: "タイトル・本文などで検索" %>
+
+        <%= submit_tag "検索", class: "btn btn-primary" %>
+      </div>
+    </div>
+
+  <% end %>
+
+</div>
+
   </div>
-  <%= submit_tag "検索", class: "btn btn-primary mt-2" %>
+
+  <!-- 検索結果 -->
+
+<% if @posts.present? %> <h5 class="mb-3 text-muted">検索結果</h5>
+
+<ul class="list-group">
+  <% @posts.each do |post| %>
+    <li class="list-group-item list-group-item-action">
+      <div>
+        <%= link_to post.title,
+                    public_group_post_path(post.group, post),
+                    class: "fw-bold text-decoration-none" %>
+
+        <div class="small text-muted mt-1">
+          グループ：<%= post.group.name %> /
+          投稿者：<%= post.user.last_name %> <%= post.user.first_name %>
+        </div>
+      </div>
+    </li>
+  <% end %>
+</ul>
+
+<% elsif params[:keyword].present? %> <div class="alert alert-secondary">
+該当する投稿は見つかりませんでした。 </div>
 <% end %>
 
-<% if @posts.present? %>
-  <h3 class="mt-4">検索結果：</h3>
-  <ul class="list-group">
-    <% @posts.each do |post| %>
-      <li class="list-group-item">
-        <%= link_to post.title, public_group_post_path(post.group, post) %><br>
-        <small>グループ: <%= post.group.name %> | 投稿者: <%= post.user.last_name %> <%= post.user.first_name %></small>
-      </li>
-    <% end %>
-  </ul>
-<% elsif params[:keyword].present? %>
-  <p>該当する投稿は見つかりませんでした。</p>
-<% end %>
+</div>

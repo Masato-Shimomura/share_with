@@ -1,36 +1,75 @@
-<h2>プロフィール編集</h2>
+<div class="container mt-4" style="max-width: 600px;">
 
-  <%= form_with(model: resource, url: registration_path(resource_name), method: :put, local: true) do |f| %>
-  <%= render "public/shared/error_messages", resource: resource %>
+  <!-- ページタイトル -->
+  <h2 class="mb-4">プロフィール編集</h2>
 
-  <div class="field">
-    <%= f.label :last_name, "姓" %><br />
-    <%= f.text_field :last_name %>
+  <!-- 編集フォーム -->
+  <div class="card mb-4">
+    <div class="card-body">
+
+      <%= form_with(model: resource,
+                    url: registration_path(resource_name),
+                    method: :put,
+                    local: true) do |f| %>
+
+        <%= render "public/shared/error_messages", resource: resource %>
+
+        <div class="row mb-3">
+          <div class="col">
+            <%= f.label :last_name, "姓", class: "form-label" %>
+            <%= f.text_field :last_name, class: "form-control" %>
+          </div>
+
+          <div class="col">
+            <%= f.label :first_name, "名", class: "form-label" %>
+            <%= f.text_field :first_name, class: "form-control" %>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <%= f.label :email, "メールアドレス", class: "form-label" %>
+          <%= f.email_field :email,
+                            autocomplete: "email",
+                            class: "form-control" %>
+        </div>
+
+        <div class="mb-4">
+          <%= f.label :current_password,
+                      "現在のパスワード（確認用）",
+                      class: "form-label" %>
+          <%= f.password_field :current_password,
+                               autocomplete: "current-password",
+                               class: "form-control" %>
+          <div class="form-text">
+            情報更新のため、現在のパスワードを入力してください。
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-between">
+          <%= link_to "マイページへ戻る",
+                      mypage_public_users_path,
+                      class: "btn btn-secondary" %>
+
+          <%= f.submit "更新する", class: "btn btn-primary" %>
+        </div>
+
+      <% end %>
+    </div>
   </div>
 
-  <div class="field">
-    <%= f.label :first_name, "名" %><br />
-    <%= f.text_field :first_name %>
+  <!-- 退会案内 -->
+  <div class="card border-danger">
+    <div class="card-body">
+      <h5 class="card-title text-danger">退会手続き</h5>
+      <p class="card-text">
+        退会をご希望の方は、以下のボタンから退会手続きを行ってください。
+      </p>
+
+      <%= link_to "退会はこちら",
+                  confirm_withdraw_public_users_path,
+                  class: "btn btn-outline-danger" %>
+    </div>
   </div>
 
-  <div class="field">
-    <%= f.label :email, "メールアドレス" %><br />
-    <%= f.email_field :email, autocomplete: "email" %>
-  </div>
-
-  <div class="field">
-    <%= f.label :current_password, "現在のパスワード（確認用）" %><br />
-    <%= f.password_field :current_password, autocomplete: "current-password" %>
-  </div>
-
-  <div class="actions">
-    <%= f.submit "更新する", class: "btn btn-primary" %>
-  </div>
-<% end %>
-
-<%= link_to "マイページへ戻る", mypage_public_users_path, class: "btn btn-secondary", style: "margin-top: 20px;" %>
-
-<div style="margin-top: 40px;">
-  <p>退会をご希望の方は、以下のリンクから退会手続きを行ってください。</p>
-  <%= link_to "退会はこちら", confirm_withdraw_public_users_path, class: "btn btn-outline-danger" %>
 </div>
+

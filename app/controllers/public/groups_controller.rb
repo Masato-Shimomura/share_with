@@ -1,6 +1,8 @@
 class Public::GroupsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_group, only: [:show, :edit, :update, :destroy, :calendar, :confirm_withdraw, :withdraw]
+  before_action :authorize_group_owner!, only: [:edit, :update, :destroy]
+
 
   def accept_invitation
     user_group = current_user.user_groups.find_by(group_id: params[:id], status: :pending)
@@ -178,4 +180,12 @@ class Public::GroupsController < ApplicationController
   def group_params
     params.require(:group).permit(:name, :explanation)
   end
+
+  def authorize_group_owner!
+    unless @group.owner_id == current_user.id
+      redirect_to public_groups_path,
+                  alert: "このグループを編集する権限がありません。"
+    end
+  end
+  
 end

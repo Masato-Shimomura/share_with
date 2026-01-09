@@ -1,30 +1,53 @@
-<h2>グループ情報の編集</h2>
+<div class="container mt-4" style="max-width: 700px;">
 
-<%= form_with(model: @group, url: public_group_path(@group), method: :patch, local: true) do |f| %>
-  <% if @group.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@group.errors.count, "エラー") %> が発生しました:</h2>
-      <ul>
-        <% @group.errors.full_messages.each do |msg| %>
-          <li><%= msg %></li>
+  <!-- ページタイトル -->
+  <h2 class="mb-4">グループ情報の編集</h2>
+
+  <!-- 編集フォーム -->
+  <div class="card">
+    <div class="card-body">
+
+      <%= form_with(model: @group,
+                    url: public_group_path(@group),
+                    method: :patch,
+                    local: true) do |f| %>
+
+        <% if @group.errors.any? %>
+          <div class="alert alert-danger">
+            <h5 class="alert-heading">
+              <%= pluralize(@group.errors.count, "エラー") %> が発生しました
+            </h5>
+            <ul class="mb-0">
+              <% @group.errors.full_messages.each do |msg| %>
+                <li><%= msg %></li>
+              <% end %>
+            </ul>
+          </div>
         <% end %>
-      </ul>
+
+        <div class="mb-3">
+          <%= f.label :name, "グループ名", class: "form-label" %>
+          <%= f.text_field :name, class: "form-control" %>
+        </div>
+
+        <div class="mb-4">
+          <%= f.label :explanation, "説明", class: "form-label" %>
+          <%= f.text_area :explanation,
+                          class: "form-control",
+                          rows: 4 %>
+        </div>
+
+        <div class="d-flex justify-content-between">
+          <%= link_to "戻る",
+                      public_group_path(@group),
+                      class: "btn btn-secondary" %>
+
+          <%= f.submit "更新する", class: "btn btn-primary" %>
+        </div>
+
+      <% end %>
+
     </div>
-  <% end %>
-
-  <div class="field">
-    <%= f.label :name, "グループ名" %><br>
-    <%= f.text_field :name %>
   </div>
 
-  <div class="field">
-    <%= f.label :explanation, "説明" %><br>
-    <%= f.text_area :explanation %>
-  </div>
-
-  <div class="actions">
-    <%= f.submit "更新する", class: "btn btn-primary" %>
-  </div>
-<% end %>
-
-<%= link_to "戻る", public_group_path(@group), class: "btn btn-secondary", style: "margin-top: 20px;" %>
+</div>

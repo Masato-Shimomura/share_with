@@ -1,21 +1,55 @@
-<h2>ユーザー検索</h2>
+<div class="container mt-4" style="max-width: 700px;">
 
-<%= form_with url: public_users_path, method: :get, local: true do |f| %>
-  <div style="margin-bottom: 15px;">
-    <%= f.label :keyword, "名前またはメールアドレスで検索" %><br>
-    <%= f.text_field :keyword, value: params[:keyword], placeholder: "例: 山田 太郎、example@example.com" %>
-    <%= f.submit "検索", class: "btn btn-primary" %>
+  <!-- ページタイトル -->
+  <h2 class="mb-4">ユーザー検索</h2>
+
+  <!-- 検索フォーム -->
+  <div class="card mb-4">
+    <div class="card-body">
+
+      <%= form_with url: public_users_path,
+                    method: :get,
+                    local: true,
+                    class: "row g-2 align-items-end" do |f| %>
+
+        <div class="col-12">
+          <%= f.label :keyword,
+                      "名前またはメールアドレスで検索",
+                      class: "form-label" %>
+          <%= f.text_field :keyword,
+                            value: params[:keyword],
+                            placeholder: "例: 山田 太郎 / example@example.com",
+                            class: "form-control" %>
+        </div>
+
+        <div class="col-12 text-end">
+          <%= f.submit "検索", class: "btn btn-primary" %>
+        </div>
+
+      <% end %>
+
+    </div>
   </div>
-<% end %>
 
-<% if @users.any? %>
-  <ul>
-    <% @users.each do |user| %>
-      <li style="margin-bottom: 10px;">
-        <%= link_to "#{user.last_name} #{user.first_name}", public_user_path(user) %>
-      </li>
-    <% end %>
-  </ul>
-<% else %>
-  <p>該当するユーザーはいません。</p>
-<% end %>
+  <!-- 検索結果 -->
+  <% if @users.any? %>
+    <div class="card">
+      <div class="card-body p-0">
+        <ul class="list-group list-group-flush">
+          <% @users.each do |user| %>
+            <li class="list-group-item">
+              <%= link_to "#{user.last_name} #{user.first_name}",
+                          public_user_path(user),
+                          class: "text-decoration-none" %>
+            </li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  <% else %>
+    <div class="alert alert-secondary">
+      該当するユーザーはいません。
+    </div>
+  <% end %>
+
+</div>

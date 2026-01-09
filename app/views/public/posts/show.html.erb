@@ -1,15 +1,58 @@
-<h2>投稿詳細</h2>
+<div class="container mt-4" style="max-width: 800px;">
 
-<p><strong>タイトル:</strong> <%= @post.title %></p>
-<p><strong>本文:</strong> <%= simple_format(@post.body) %></p>
-<p><strong>投稿者:</strong> <%= @post.user.last_name %> <%= @post.user.first_name %></p>
-<p><strong>開始日時:</strong> <%= l(@post.start_at, format: :long) %></p>
-<p><strong>終了日時:</strong> <%= l(@post.end_at, format: :long) %></p>
+  <!-- 投稿詳細 -->
+  <div class="card mb-4">
+    <div class="card-body">
 
-<% if @post.user == current_user %>
-  <%= link_to "編集", edit_public_group_post_path(@group, @post), class: "btn btn-primary" %>
-  <%= link_to "削除", public_group_post_path(@group, @post), method: :delete, data: { confirm: "本当に削除しますか？" }, class: "btn btn-danger" %>
-<% end %>
+      <h3 class="card-title mb-3"><%= @post.title %></h3>
 
-<%= link_to "コメント", public_group_post_comments_path(@group, @post), class: "btn btn-outline-primary btn-sm" %>
-<%= link_to "グループ詳細に戻る", public_group_path(@group), class: "btn btn-light mt-3" %>
+      <p class="mb-3">
+        <%= simple_format(@post.body) %>
+      </p>
+
+      <hr>
+
+      <p class="text-muted mb-1">
+        <strong>投稿者：</strong>
+        <%= @post.user.last_name %> <%= @post.user.first_name %>
+      </p>
+
+      <p class="text-muted mb-1">
+        <strong>開始日時：</strong>
+        <%= l(@post.start_at, format: :long) %>
+      </p>
+
+      <p class="text-muted mb-0">
+        <strong>終了日時：</strong>
+        <%= l(@post.end_at, format: :long) %>
+      </p>
+
+    </div>
+  </div>
+
+  <!-- 操作ボタン -->
+  <div class="d-flex flex-wrap gap-2">
+
+    <%= link_to "コメントを見る",
+                public_group_post_comments_path(@group, @post),
+                class: "btn btn-outline-primary" %>
+
+    <%= link_to "グループ詳細に戻る",
+                public_group_path(@group),
+                class: "btn btn-light" %>
+
+    <% if @post.user == current_user %>
+      <%= link_to "編集",
+                  edit_public_group_post_path(@group, @post),
+                  class: "btn btn-primary" %>
+
+      <%= link_to "削除",
+                  public_group_post_path(@group, @post),
+                  method: :delete,
+                  data: { confirm: "本当に削除しますか？" },
+                  class: "btn btn-outline-danger" %>
+    <% end %>
+
+  </div>
+
+</div>
