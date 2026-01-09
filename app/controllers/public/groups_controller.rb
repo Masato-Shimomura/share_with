@@ -70,6 +70,11 @@ class Public::GroupsController < ApplicationController
     @posts = @group.posts.order(created_at: :desc)
   end
 
+  def calendar
+    @group = Group.find(params[:id])
+  end
+  
+
   def invite
 
     if params[:keyword].present?
