@@ -1,7 +1,10 @@
 class Admin::UsersController < Admin::ApplicationController
   def index
-    @users = User.all
+    @users = User
+               .includes(:groups, :posts, :comments)
+               .order(created_at: :desc)
   end
+  
 
   def show
     @user = User.find(params[:id])
@@ -23,13 +26,13 @@ class Admin::UsersController < Admin::ApplicationController
   def destroy
     @user = User.find(params[:id])
     @user.update(is_active: false)
-    redirect_to admin_users_path, notice: "ユーザーを削除しました。"
+    redirect_to admin_users_path, notice: "ユーザーを退会状態にしました。"
   end
 
   private
 
   def user_params
-    params.require(:user).permit(:name, :email, :is_active)
-  end
+    params.require(:user).permit(:last_name, :first_name, :email, :is_active)
+  end  
 
 end

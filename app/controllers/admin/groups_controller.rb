@@ -1,8 +1,20 @@
 class Admin::GroupsController < Admin::ApplicationController
   def index
-    @groups = Group.all
-  end
-
+    @keyword = params[:keyword]
+  
+    @groups =
+      if @keyword.present?
+        Group
+          .where("name LIKE ?", "%#{@keyword}%")
+          .includes(:owner, :users, :posts)
+          .order(created_at: :desc)
+      else
+        Group
+          .includes(:owner, :users, :posts)
+          .order(created_at: :desc)
+      end
+  end  
+  
   def show
     @group = Group.find(params[:id])
   end

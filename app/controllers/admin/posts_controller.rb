@@ -1,7 +1,10 @@
 class Admin::PostsController < Admin::ApplicationController
   def index
-    @posts = Post.all
+    @posts = Post
+               .includes(:user, :group)
+               .order(created_at: :desc)
   end
+  
 
   def show
     @post = Post.find(params[:id])

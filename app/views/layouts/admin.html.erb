@@ -5,13 +5,18 @@
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
     <%= stylesheet_link_tag 'application', media: 'all' %>
-    <%= javascript_pack_tag 'application' %>
   </head>
 
   <body>
     <header>
       <% if admin_signed_in? %>
-        <%= link_to 'ログアウト', destroy_admin_session_path, method: :delete %>
+        <nav>
+          <%= link_to 'Home（グループ一覧）', admin_groups_path %> |
+          <%= link_to 'ユーザー一覧', admin_users_path %> |
+          <%= link_to '投稿一覧', admin_posts_path %> |
+          <%= link_to 'コメント一覧', admin_comments_path %> |
+          <%= link_to 'ログアウト', destroy_admin_session_path, method: :delete %>
+        </nav>
       <% end %>
     </header>
 
