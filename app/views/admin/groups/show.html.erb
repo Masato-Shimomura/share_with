@@ -1,0 +1,23 @@
+<h1>グループ詳細</h1>
+
+<table>
+  <tr>
+    <th>グループ名</th>
+    <td><%= @group.name %></td>
+  </tr>
+
+  <tr>
+    <th>説明</th>
+    <td><%= @group.explanation %></td>
+  </tr>
+
+  <tr>
+    <th>作成日</th>
+    <td><%= l @group.created_at %></td>
+  </tr>
+</table>
+
+<br>
+
+<%= link_to '編集する', edit_admin_group_path(@group) %> |
+<%= link_to 'グループ一覧に戻る', admin_groups_path %>

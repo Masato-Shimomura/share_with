@@ -1,0 +1,36 @@
+<h1>ユーザー一覧</h1>
+
+<%= form_with url: admin_users_path, method: :get, local: true do |f| %>
+  <%= f.text_field :keyword, value: params[:keyword], placeholder: "名前・メールで検索" %>
+  <%= f.submit "検索" %>
+<% end %>
+
+<table>
+  <thead>
+    <tr>
+      <th>名前</th>
+      <th>メール</th>
+      <th>ステータス</th>
+      <th>グループ数</th>
+      <th>投稿数</th>
+      <th>登録日</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @users.each do |user| %>
+      <tr>
+        <td>
+          <%= link_to "#{user.last_name} #{user.first_name}", admin_user_path(user) %>
+        </td>
+        <td><%= user.email %></td>
+        <td>
+          <%= user.is_active ? "有効" : "退会" %>
+        </td>
+        <td><%= user.groups.size %></td>
+        <td><%= user.posts.size %></td>
+        <td><%= l user.created_at, format: :short %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

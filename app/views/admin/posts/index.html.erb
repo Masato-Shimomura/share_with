@@ -1,0 +1,42 @@
+<h1>投稿一覧</h1>
+
+<!-- 検索フォーム -->
+<div style="margin-bottom: 20px;">
+  <%= form_with url: admin_posts_path, method: :get, local: true do |f| %>
+    <%= f.text_field :keyword, value: params[:keyword], placeholder: "タイトル・本文で検索" %>
+    <%= f.submit "検索" %>
+  <% end %>
+</div>
+
+<!-- 投稿一覧 -->
+<table border="1" cellpadding="8" cellspacing="0">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>タイトル</th>
+      <th>投稿者</th>
+      <th>グループ</th>
+      <th>投稿日時</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @posts.each do |post| %>
+      <tr>
+        <td><%= post.id %></td>
+        <td>
+          <%= link_to post.title, admin_post_path(post) %>
+        </td>
+        <td>
+          <%= post.user.last_name %> <%= post.user.first_name %>
+        </td>
+        <td>
+          <%= post.group.name %>
+        </td>
+        <td>
+          <%= post.created_at.strftime("%Y/%m/%d %H:%M") %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

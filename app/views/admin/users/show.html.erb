@@ -1,0 +1,43 @@
+<h1>ユーザー詳細</h1>
+
+<h2>基本情報</h2>
+<p><strong>名前：</strong><%= @user.last_name %> <%= @user.first_name %></p>
+<p><strong>メール：</strong><%= @user.email %></p>
+<p><strong>ステータス：</strong><%= @user.is_active ? "有効" : "退会" %></p>
+<p><strong>登録日：</strong><%= l @user.created_at, format: :short %></p>
+
+<hr>
+
+<h2>利用状況</h2>
+<ul>
+  <li>所属グループ数：<%= @user.groups.count %></li>
+  <li>投稿数：<%= @user.posts.count %></li>
+  <li>コメント数：<%= @user.comments.count %></li>
+</ul>
+
+<hr>
+
+<h2>所属グループ</h2>
+<ul>
+  <% @user.groups.each do |group| %>
+    <li>
+      <%= link_to group.name, admin_group_path(group) %>
+    </li>
+  <% end %>
+</ul>
+
+<hr>
+
+<h2>投稿一覧</h2>
+<ul>
+  <% @user.posts.each do |post| %>
+    <li>
+      <%= link_to post.title, admin_post_path(post) %>
+    </li>
+  <% end %>
+</ul>
+
+<hr>
+
+<%= link_to "ユーザー一覧に戻る", admin_users_path %> |
+<%= link_to "編集", edit_admin_user_path(@user) %>

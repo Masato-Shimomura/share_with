@@ -1,0 +1,36 @@
+<h1>コメント詳細</h1>
+
+<p>
+  <strong>ID：</strong>
+  <%= @comment.id %>
+</p>
+
+<p>
+  <strong>コメント内容：</strong><br>
+  <%= simple_format(@comment.body) %>
+</p>
+
+<p>
+  <strong>投稿：</strong>
+  <%= link_to @comment.post.title,
+              admin_post_path(@comment.post) %>
+</p>
+
+<p>
+  <strong>ユーザー：</strong>
+  <%= link_to "#{@comment.user.last_name} #{@comment.user.first_name}",
+              admin_user_path(@comment.user) %>
+</p>
+
+<p>
+  <strong>作成日時：</strong>
+  <%= l @comment.created_at, format: :long %>
+</p>
+
+<hr>
+
+<%= link_to "コメント一覧に戻る", admin_comments_path %> |
+<%= link_to "削除",
+            admin_comment_path(@comment),
+            method: :delete,
+            data: { confirm: "本当に削除しますか？" } %>

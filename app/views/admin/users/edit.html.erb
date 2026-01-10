@@ -1,0 +1,39 @@
+<h1>ユーザー編集</h1>
+
+<%= form_with model: @user, url: admin_user_path(@user), method: :patch do |f| %>
+
+  <h2>基本情報</h2>
+
+  <div>
+    <%= f.label :last_name, "姓" %><br>
+    <%= f.text_field :last_name %>
+  </div>
+
+  <div>
+    <%= f.label :first_name, "名" %><br>
+    <%= f.text_field :first_name %>
+  </div>
+
+  <div>
+    <%= f.label :email, "メールアドレス" %><br>
+    <%= f.email_field :email %>
+  </div>
+
+  <hr>
+
+  <h2>ステータス</h2>
+
+  <div>
+    <%= f.label :is_active, "アカウント状態" %><br>
+    <%= f.select :is_active, [["有効", true], ["退会", false]] %>
+  </div>
+
+  <hr>
+
+  <%= f.submit "更新する" %>
+<% end %>
+
+<br>
+
+<%= link_to "ユーザー詳細に戻る", admin_user_path(@user) %> |
+<%= link_to "ユーザー一覧に戻る", admin_users_path %>

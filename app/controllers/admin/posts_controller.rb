@@ -3,6 +3,15 @@ class Admin::PostsController < Admin::ApplicationController
     @posts = Post
                .includes(:user, :group)
                .order(created_at: :desc)
+
+    if params[:keyword].present?
+     @posts = @posts.where(
+      "title LIKE ? OR body LIKE ?",
+      "%#{params[:keyword]}%",
+      "%#{params[:keyword]}%"
+     )
+    end
+                         
   end
   
 

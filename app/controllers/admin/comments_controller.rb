@@ -5,9 +5,13 @@ class Admin::CommentsController < Admin::ApplicationController
                   .order(created_at: :desc)
   end
 
+  def show
+    @comment = Comment.find(params[:id])
+  end
+
   def destroy
-    comment = Comment.find(params[:id])
-    comment.destroy
+    @comment = Comment.find(params[:id])
+    @comment.destroy
     redirect_to admin_comments_path, notice: "コメントを削除しました。"
   end
 end

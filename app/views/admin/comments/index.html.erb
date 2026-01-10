@@ -1,0 +1,43 @@
+<h1>コメント一覧</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>コメント内容</th>
+      <th>投稿</th>
+      <th>ユーザー</th>
+      <th>投稿日</th>
+      <th>操作</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @comments.each do |comment| %>
+      <tr>
+        <td>
+          <%= link_to truncate(comment.body, length: 40), admin_comment_path(comment) %>
+        </td>
+
+        <td>
+          <%= link_to comment.post.title, admin_post_path(comment.post) %>
+        </td>
+
+        <td>
+          <%= link_to "#{comment.user.last_name} #{comment.user.first_name}",
+                      admin_user_path(comment.user) %>
+        </td>
+
+        <td>
+          <%= l comment.created_at, format: :short %>
+        </td>
+
+        <td>
+          <%= link_to "削除",
+                      admin_comment_path(comment),
+                      method: :delete,
+                      data: { confirm: "このコメントを削除しますか？" } %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

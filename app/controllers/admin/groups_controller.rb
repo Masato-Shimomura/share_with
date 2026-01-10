@@ -1,4 +1,6 @@
 class Admin::GroupsController < Admin::ApplicationController
+  before_action :set_group, only: [:show, :edit, :update, :destroy]
+
   def index
     @keyword = params[:keyword]
   
@@ -39,6 +41,10 @@ class Admin::GroupsController < Admin::ApplicationController
   end
 
   private
+
+  def set_group
+    @group = Group.find(params[:id])
+  end  
 
   def group_params
     params.require(:group).permit(:name, :explanation)

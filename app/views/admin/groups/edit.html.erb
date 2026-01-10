@@ -1,0 +1,43 @@
+<h1>グループ編集</h1>
+
+<%= form_with model: [:admin, @group], local: true do |f| %>
+  <% if @group.errors.any? %>
+    <div>
+      <h3><%= @group.errors.count %> 件のエラーがあります</h3>
+      <ul>
+        <% @group.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= f.label :name, "グループ名" %><br>
+    <%= f.text_field :name %>
+  </div>
+
+  <div>
+    <%= f.label :explanation, "グループ説明" %><br>
+    <%= f.text_area :explanation %>
+  </div>
+
+  <div>
+    <%= f.submit "更新する" %>
+  </div>
+<% end %>
+
+<hr>
+
+<div>
+  <%= link_to "グループを削除する",
+              admin_group_path(@group),
+              method: :delete,
+              data: { confirm: "本当に削除しますか？" } %>
+</div>
+
+<br>
+
+<div>
+  <%= link_to "詳細ページに戻る", admin_group_path(@group) %>
+</div>

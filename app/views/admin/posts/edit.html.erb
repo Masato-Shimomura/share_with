@@ -1,0 +1,44 @@
+<h1>投稿編集</h1>
+
+<%= form_with model: @post, url: admin_post_path(@post), method: :patch, local: true do |f| %>
+  <div>
+    <%= f.label :title, "タイトル" %><br>
+    <%= f.text_field :title %>
+  </div>
+
+  <br>
+
+  <div>
+    <%= f.label :body, "本文" %><br>
+    <%= f.text_area :body, rows: 8 %>
+  </div>
+
+  <br>
+
+  <div>
+    <%= f.label :start_at, "開始日時" %><br>
+    <%= f.datetime_select :start_at %>
+  </div>
+
+  <br>
+
+  <div>
+    <%= f.label :end_at, "終了日時" %><br>
+    <%= f.datetime_select :end_at %>
+  </div>
+
+  <br>
+
+  <%= f.submit "更新する" %>
+<% end %>
+
+<hr>
+
+<%= link_to "投稿を削除する",
+            admin_post_path(@post),
+            method: :delete,
+            data: { confirm: "この投稿を削除しますか？" } %>
+
+<br><br>
+
+<%= link_to "詳細ページに戻る", admin_post_path %>

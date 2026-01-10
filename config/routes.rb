@@ -8,7 +8,7 @@ Rails.application.routes.draw do
     resources :groups, only: [:index, :show, :edit, :update, :destroy]
     resources :users, only: [:index, :show, :edit, :update, :destroy]
     resources :posts, only: [:index, :show, :edit, :update, :destroy]
-    resources :comments, only: [:index, :destroy]
+    resources :comments, only: [:index, :show, :destroy]
   end
 
   devise_for :users, skip: [:passwords], controllers: {
