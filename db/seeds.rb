@@ -9,5 +9,4 @@
 Admin.find_or_create_by!(email: "shimo7777777777@gmail.com") do |admin|
   admin.password = "shimo789"
   admin.password_confirmation = "shimo789"
-  admin.confirmed_at = Time.current
 end
